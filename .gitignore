@@ -1,1 +1,6 @@
+# temporary hiddned
 /_fish_
+
+# build directory
+/build/*
+!/build/out/
