@@ -1,0 +1,32 @@
+Ptoject structure:
+    /build      - directory with intermediate files
+        /out        - directory with renedered .pdf files
+        /...        - additional intermediate files
+    /app        - directory with executable files
+    /src        - directory with source files
+        /builder    - js application to build the project
+        /format     - directory with documet format files
+        /section    - .wl files to be linked into sections
+        /...        - directories with another .tex files and another utilities
+    /sections   - directory with document parts
+        /1 - part   - 1st part's working directory
+            /img        - the section's images
+            /eqs        - the section's equations
+            /math       - directory with Wolfram's source files
+                /bin        - directory with intermediate data (could generates during math calcuations)
+                /proj.wl    - LINK to a file that calculates all project-structure-significant constants 
+                            (roots, paths to common and local directories (like /img directory), ...)
+                /...        - Wolfram's source files
+            /main.tex   - the sectoin's main file
+            /appx.tex   - the section's appendix' main file
+            /...        - another section's files
+        /...        - another parts
+    /biblio     - directory with bibliography files
+        /_..._.bib  - file with all used references
+        /...        - the books / articles / standarts
+    /models     - directory with 3d-models
+    /build.bat  - script that activates 
+
+Tasks:
+    ☐ figure out how to import MathType equations into a distination document
+    
