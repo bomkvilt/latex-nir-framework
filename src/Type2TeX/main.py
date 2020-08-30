@@ -8,7 +8,7 @@ import os
 
 
 class ToLaTeX:
-    def __init__(self, build_path, proj_root):
+    def __init__(self, build_path, proj_root, **kwargs):
         root = path.dirname(path.realpath(__file__))
         self.mmltex_path = path.join(root, "mmltex/mmltex.xsl")
         self.build_path  = build_path
@@ -18,17 +18,39 @@ class ToLaTeX:
         self.toks_list   = json.load(open(self.toks_path, 'r'))
         self.toks_list   = sorted(self.toks_list)
         self.toks_list.reverse()
+        # additoinal optoins
+        self.bForce     = kwargs.get('bForce', False)
     
     # convert MathType .eps equaition into .tex equation
     #   \note: as a result the method will produce .tex
-    #       files with equation eneries usualy are placeed
-    #       into $$ or \[\] blocks
+    #       files with non-wrapped equations
+    #   \note: the converted doesn't convert up-to-date equations
     def convert(self, equation_path):
-        mml_text = self.readMathML(equation_path)
-        tex_text = self.genLaTeX(mml_text)
         tex_path = self.getTeXPath(equation_path)
-        self.saveLaTeX(tex_text, tex_path)
-        return tex_path
+        # is it need to generate a .tex file?
+        if not self.checkTex(equation_path, tex_path) or self.bForce:
+            mml_text = self.readMathML(equation_path)
+            tex_text = self.genLaTeX(mml_text)
+            tex_text = self.tuneTeXText(tex_text)
+            self.saveLaTeX(tex_text, tex_path)
+            return tex_path
+        return 'up-to-date'
+
+    # check if the TeX file is up to date
+    def checkTex(self, equation_path, tex_path):
+        if not path.exists(tex_path):
+            return False
+        if not path.exists(equation_path):
+            raise RuntimeError('source .eps equation doesn`t exist : "{}"'.format(equation_path))
+        if path.isdir(tex_path):
+            raise RuntimeError('destination file is a directory: "{}"'.format(tex_path))
+        
+        # if .tex file is older than .eps one
+        time0 = path.getmtime(equation_path)
+        time1 = path.getmtime(tex_path)
+        if (time0 > time1):
+            return False
+        return True
 
     # read MathML code from a MathType .eps file
     def readMathML(self, equation_path):
@@ -69,6 +91,11 @@ class ToLaTeX:
         mml_dom  = ET.XSLT(xslt)(mml_dom)
         tex_text = str(mml_dom).replace('$', '')
         return tex_text
+
+    # post-process a generated LaTeX equation
+    def tuneTeXText(self, tex_text):
+        tex_text = tex_text.replace(r'\frac', r'\dfrac')
+        return tex_text
         
     # generate an outcomming .tex file's path
     def getTeXPath(self, equation_path):
@@ -87,9 +114,9 @@ class ToLaTeX:
         tex_file.close()
 
 
-def buildEquations(proj_root, build_root, scan_root):
-    converter = ToLaTeX(build_root, proj_root)
-    for equation_path in glob.iglob(path.join(scan_root + '**/*.eps'), recursive = True):
+def buildEquations(proj_root, build_root, scan_root, **kwargs):
+    converter = ToLaTeX(build_root, proj_root, **kwargs)
+    for equation_path in glob.iglob(scan_root + '/**/*.eps', recursive=True):
         path0 = equation_path
         path1 = converter.convert(equation_path)
         print('equation: "{}" -> "{}"'.format(path0, path1).replace('\\', '/'))
@@ -102,7 +129,10 @@ parser.add_argument('-p', '--proj_root', default=os.getcwd(),
     help='project root directory')
 parser.add_argument('-b', '--build_root', default='build',
     help='directory to store resulting files')
+parser.add_argument('-f', '--force', default=False, action='store_true',
+    help='disable a lazy generation')
 args = parser.parse_args()
 
-buildEquations(args.proj_root, args.build_root, args.scan_root)
-
+buildEquations(args.proj_root, args.build_root, args.scan_root,
+    bForce=args.force
+)
