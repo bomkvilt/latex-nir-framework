@@ -1,0 +1,21 @@
+
+\defaulthyphenchar=127
+\usepackage{cmap}            % improved search of russian words in a produced .pdf file
+\usepackage{textcomp}        % 
+\usepackage[T1,T2A]{fontenc} % support of russian letters
+\usepackage[utf8]{inputenc}  % utf8 encoding
+
+\usepackage[english, russian]{babel} % Languages: Russian and English
+\makeatletter\AtBeginDocument{\let\@elt\relax}\makeatother % babel 3.40 fix
+
+
+% cyrilic chars in subequation
+\patchcmd{\subequations} {
+    \def\theequation{\theparentequation\alph{equation}}
+} {
+    \def\theequation{\theparentequation\asbuk{equation}}
+} {
+    \typeout{subequations patched}
+} {
+    \typeout{subequations not patched}
+}

@@ -1,1 +1,0 @@
-Internal utility required to corretly build the project.

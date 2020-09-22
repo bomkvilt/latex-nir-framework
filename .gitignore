@@ -1,6 +1,15 @@
-# temporary hiddned
-/_fish_
+# tmp
+/_old_/
 
 # build directory
-/build/*
-!/build/out/
+/example/build/*
+!example/build/out/
+!example/build/framework
+
+# latex
+*.synctex(*)
+*.lgpl
+*.aux
+*.log
+*.out
+*.pytxcode

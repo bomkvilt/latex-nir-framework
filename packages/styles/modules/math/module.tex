@@ -1,0 +1,18 @@
+
+\usepackage{amsthm,amsmath,amscd}   % Математические дополнения от AMS
+\usepackage{amsfonts,amssymb}       % Математические дополнения от AMS
+\usepackage{mathtools}              % Добавляет окружение multlined
+\usepackage{xfrac}                  % Красивые дроби
+\usepackage[
+    locale = DE,
+    list-separator       = {;\,},
+    list-final-separator = {;\,},
+    list-pair-separator  = {;\,},
+    list-units           = single,
+    range-units          = single,
+    range-phrase         = {\text{\ensuremath{-}}},
+    quotient-mode        = fraction,
+    fraction-function    = \sfrac,
+    separate-uncertainty,
+]{siunitx}
+\sisetup{inter-unit-product = \ensuremath{{}\cdot{}}}

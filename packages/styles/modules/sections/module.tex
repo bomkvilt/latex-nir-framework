@@ -1,0 +1,49 @@
+%%% ----------------------------------------------------------------- %%%
+%%  This module provides a functionality allows to create LaTeX projects
+%   designed by a modular principal. 
+%   
+%   According to the principal a basic document consists from massive
+%   independed parts named as sections. Each sections contains all required
+%   Wolfram code, MathType formulas and figures, placed into specific derectories.
+%   The resources are used within the section .tex files that describes:
+%   - main section content
+%   - the section's appendices
+% 
+%   The sections includes into a main document file with use of special
+%   command. Section's resources includes with specific commands too.
+%   All the comands are placed below.
+
+%% ----------------| required packages
+
+% LaTeX3 support
+\usepackage{expl3 }
+\usepackage{xparse}     
+\usepackage{xargs }
+
+% other packages
+\usepackage{etoolbox} 
+\usepackage{graphicx} 
+\usepackage{xifthen }
+
+\ExplSyntaxOn
+
+
+%% ----------------| global variables
+
+\seq_new:N \g_secs_added_sections_tl    % list of registed  sections
+\seq_new:N \g_secs_added_appendices_tl  % list of registred appendices
+
+% flag shows that a current code is a sections inside
+\bool_new:N        \g_secs_flags_inSection
+\bool_gset_false:N \g_secs_flags_inSection
+
+
+%% ----------------| include submodules
+
+\input{./utility.tex  } % internal helper functions
+\input{./interface.tex} % public functions
+
+
+%% ----------------| make the module compleatted
+
+\ExplSyntaxOff

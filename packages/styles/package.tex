@@ -1,0 +1,67 @@
+
+% common packages
+\usepackage{comment  }  % 
+\usepackage{etoolbox }  % usefull tools
+\usepackage{pdflscape}  % album layout
+\usepackage{geometry }  % fields
+
+% modules
+\input{./modules/math/module}
+
+% paragraphs
+\providebool{newpoly} % polyglossia with indentfirst setting
+\boolfalse  {newpoly} % setting our new boolean flag to default false
+\indentafterchapter
+\usepackage{indentfirst}
+
+% tables
+\usepackage{longtable, ltcaption} % long tables
+\usepackage{multirow,  makecell } % improved table formatting
+\usepackage{tabu,      tabulary } % automatic table row width. \note: \tabu must be colled before \hyperref
+\usepackage{threeparttable}       % automatic table caption's width
+
+% common typography
+\usepackage{soulutf8} % multiline underlines and strikethroughs
+\usepackage{icomma}   % support of comma in equations' digits
+\usepackage[hyphenation, lastparline]{impnattypo}
+
+% vector graphics
+\usepackage{tikz}
+
+% hyperrefs
+\usepackage[hidelinks]{hyperref}
+
+% figures
+\usepackage{graphicx}
+\usepackage{caption }
+\usepackage{subcaption}
+\usepackage{pdfpages}   % extarnal PDF files
+
+
+% counters
+\usepackage[figure,table]{totalcount}
+\usepackage{totcount}
+\usepackage{totpages}
+
+% references
+\usepackage{cleveref}
+\usepackage{kvsetkeys} 
+
+% support of white spaces in \labelcref https://tex.stackexchange.com/a/340502/104425
+\makeatletter
+\let\org@@cref\@cref
+\renewcommand*{\@cref}[2] {
+    \edef\process@me {
+        \noexpand\org@@cref{#1} {\zap@space#2 \@empty}
+    }
+    \process@me
+}
+\makeatother
+
+\usepackage{placeins} % \FloatBarrier
+
+% modules
+\input{./modules/lang/ru/module}
+\input{./modules/biblio/module}
+\input{./modules/sections/module}
+\input{./modules/frames/module}
