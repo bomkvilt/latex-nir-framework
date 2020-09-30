@@ -1,19 +1,34 @@
 {
     "latex-workshop.view.pdf.viewer": "tab",
-    "latex-workshop.bibtex-format.tab": "4 spaces",
-    "latex-workshop.intellisense.citation.maxfilesizeMB": 50,
     "latex-workshop.latex.build.clearLog.everyRecipeStep.enabled": false,
+    "latex-workshop.latex.autoBuild.cleanAndRetry.enabled": false,
+    "latex-workshop.latex.autoBuild.run": "never",
+    "latex-workshop.intellisense.citation.maxfilesizeMB": 50,
+    "latex-workshop.intellisense.file.base": "both",
     "latex-workshop.latex.outDir": "%DIR%/build/TeX",
     "latex-workshop.latex.tools": [
         {
-            "name": "pdflatex",
-            "command": "pdflatex",
+            "name": "xelatex-no-pdf",
+            "command": "xelatex",
             "args": [
+                "--no-pdf"  ,
                 "-synctex=1",
+                "-recorder" ,
                 "-interaction=nonstopmode",
-                "-recorder",
-                "-file-line-error",
-                "-aux-directory=%OUTDIR%",
+                "-aux-directory=%OUTDIR%" ,
+                "-output-directory=%OUTDIR%",
+                "%DOC%",
+            ],
+            "env": {}
+        },
+        {
+            "name": "xelatex-pdf",
+            "command": "xelatex",
+            "args": [
+                "--no-pdf"  ,
+                "-recorder" ,
+                "-interaction=nonstopmode",
+                "-aux-directory=%OUTDIR%" ,
                 "-output-directory=%OUTDIR%",
                 "%DOC%",
             ],
@@ -28,18 +43,18 @@
             "env": {}
         },
         {
-            "name": "bibtex",
-            "command": "bibtex",
+            "name": "biber",
+            "command": "biber",
             "args": [
-                "-include-directory=%OUTDIR%",
-                "%OUTDIR%/%DOCFILE%.aux"
+                "-output_directory=%OUTDIR%",
+                "%DOCFILE%"
             ],
             "env": {}
         },
         {
             "name": "equations",
             "command": "python",
-            "args": [ "-B",
+            "args": [ "-B", 
                 "control.py",
                 "type2tex",
                 "sections/:all:"
@@ -60,18 +75,17 @@
     ],
     "latex-workshop.latex.recipes": [
         {
-            "name": "pdflatex ➞ bibtex ➞ pdflatex × 2",
+            "name": "build",
             "tools": [
                 "sections",
-                // "equations",
-                "pdflatex",
-                // "bibtex",
-                "pdflatex",
+                "equations",
+                "xelatex-no-pdf",
+                "biber",
+                "xelatex-pdf",
             ]
         },
     ],
     "latex-workshop.latex.bibDirs": [
         "%OUTDIR%"
     ],
-    "latex-workshop.intellisense.file.base": "both",
 }

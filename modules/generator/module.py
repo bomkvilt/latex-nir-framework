@@ -68,33 +68,44 @@ class Generator:
         # abs path to a destination autogenerating file
         tex_path = "/".join([abs_target_path, self._gen_section_name])
         # section-relative path to the section's build subdirectory
-        build_path = "/".join([path.relpath(self._build_path, abs_target_path), category])
+        build_path_r = "/".join([path.relpath(self._build_path, abs_target_path), category])
+        build_path_d = "/".join([path.relpath(self._build_path, self._proj_path), category])
         # rendering of a section template
         self._render_template(tex_path, ":/templates/section.tmpl.tex", (
             {
-                'var': "frm_root_equations",
+                'var': "frmRRootEquations",
                 'val': self._src_eqs_name,
                 'exp': "section-relative path to equations root directory",
             },
             {
-                'var': "frm_root_figures",
+                'var': "frmRRootFigures",
                 'val': self._src_fig_name,
                 'exp': "section-relative path to figures root directory",
             },
             {
-                'var': "frm_root_document",
+                'var': "frmRRootDocument",
                 'val': self._sanitize_path(path.relpath(self._proj_path, abs_target_path)),
                 'exp': "section-relative path to document root directory",
             },
             {
-                'var': "frm_name_section",
+                'var': "frmDSectionPath",
+                'val': self._sanitize_path(path.relpath(abs_target_path, self._proj_path)),
+                'exp': "document-relative the section's path",
+            },
+            {
+                'var': "frmNameSection",
                 'val': path.basename(abs_target_path),
                 'exp': "the section's name",
             },
             {
-                'var': "frm_root_autogen",
-                'val': self._sanitize_path(build_path),
-                'exp': "the section's build directory",
+                'var': "frmRRootAutogen",
+                'val': self._sanitize_path(build_path_r),
+                'exp': "the section's build directory (section-relative)",
+            },
+            {
+                'var': "frmDRootAutogen",
+                'val': self._sanitize_path(build_path_d),
+                'exp': "the section's build directory (document-relative)",
             }
         ))
 

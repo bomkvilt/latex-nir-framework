@@ -6,17 +6,20 @@ import argparse
 
 class Framework:
     def __init__(self,
-        sections_root:str  = "./sections/", # 
-        build_path:str     = "./build/",    #
-        proj_path:str      = ".",           #
-        figures_path:str   = "./fig/",      #
-        equations_path:str = "./eqs/",      #
+        sections_root:str  = "sections",  # 
+        build_path:str     = "build/TeX", #
+        proj_path:str      = ".",         #
+        src_fig_name:str   = "fig",       #
+        src_eqs_name:str   = "eqs",       #
     ):
         self._module_root   = path.dirname(path.realpath(__file__))
         self._sections_root = sections_root
         self._modules       = {
             "type2tex" : Type2TEX (build_path=build_path, proj_path=proj_path),
-            "generator": Generator(build_path=build_path, proj_path=proj_path),
+            "generator": Generator(build_path=build_path, proj_path=proj_path,
+                src_fig_name=src_fig_name,
+                src_eqs_name=src_eqs_name,
+            ),
         }
         self._argparser = self._create_parser_()
 

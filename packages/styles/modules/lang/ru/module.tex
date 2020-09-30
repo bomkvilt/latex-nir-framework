@@ -1,21 +1,17 @@
 
-\defaulthyphenchar=127
-\usepackage{cmap}            % improved search of russian words in a produced .pdf file
-\usepackage{textcomp}        % 
-\usepackage[T1,T2A]{fontenc} % support of russian letters
-\usepackage[utf8]{inputenc}  % utf8 encoding
+\usepackage[no-math]{fontspec}
 
-\usepackage[english, russian]{babel} % Languages: Russian and English
-\makeatletter\AtBeginDocument{\let\@elt\relax}\makeatother % babel 3.40 fix
+\usepackage{polyglossia}[2014/05/21]
+\usepackage{xecyr}
 
+% set main and additional languages
+\setmainlanguage[babelshorthands=true,indentfirst=true]{russian}
+\setotherlanguage{english}
 
-% cyrilic chars in subequation
-\patchcmd{\subequations} {
-    \def\theequation{\theparentequation\alph{equation}}
-} {
-    \def\theequation{\theparentequation\asbuk{equation}}
-} {
-    \typeout{subequations patched}
-} {
-    \typeout{subequations not patched}
-}
+\setmonofont{Courier New}                          % моноширинный шрифт
+\newfontfamily\cyrillicfonttt{Courier New}         % моноширинный шрифт для кириллицы
+\defaultfontfeatures{Ligatures=TeX}                % стандартные лигатуры TeX, замены нескольких дефисов на тире и т. п. Настройки моноширинного шрифта должны идти до этой строки, чтобы при врезках кода программ в коде не применялись лигатуры и замены дефисов
+\setmainfont{Times New Roman}                      % Шрифт с засечками
+\newfontfamily\cyrillicfont{Times New Roman}       % Шрифт с засечками для кириллицы
+\setsansfont{Arial}                                % Шрифт без засечек
+\newfontfamily\cyrillicfontsf{Arial}               % Шрифт без засечек для кириллицы

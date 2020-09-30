@@ -1,49 +1,35 @@
-%%% ----------------------------------------------------------------- %%%
-%%  This module provides a functionality allows to create LaTeX projects
-%   designed by a modular principal. 
-%   
-%   According to the principal a basic document consists from massive
-%   independed parts named as sections. Each sections contains all required
-%   Wolfram code, MathType formulas and figures, placed into specific derectories.
-%   The resources are used within the section .tex files that describes:
-%   - main section content
-%   - the section's appendices
-% 
-%   The sections includes into a main document file with use of special
-%   command. Section's resources includes with specific commands too.
-%   All the comands are placed below.
-
-%% ----------------| required packages
-
-% LaTeX3 support
-\usepackage{expl3 }
-\usepackage{xparse}     
-\usepackage{xargs }
-
-% other packages
-\usepackage{etoolbox} 
-\usepackage{graphicx} 
-\usepackage{xifthen }
-
 \ExplSyntaxOn
+\makeatletter
+
+% module-wide constants
+\seq_new:N  \styles@sections@g@addedSections_seq
+\seq_new:N  \styles@sections@g@knownAppendices_seq
+\bool_new:N \styles@sections@g@bInSection
 
 
-%% ----------------| global variables
-
-\seq_new:N \g_secs_added_sections_tl    % list of registed  sections
-\seq_new:N \g_secs_added_appendices_tl  % list of registred appendices
-
-% flag shows that a current code is a sections inside
-\bool_new:N        \g_secs_flags_inSection
-\bool_gset_false:N \g_secs_flags_inSection
+% settings
+% \todo: make overrideable
+\str_new:N   \styles@sections@autogen
+\str_gset:Nn \styles@sections@autogen {[autogen].tex}
 
 
-%% ----------------| include submodules
-
-\input{./utility.tex  } % internal helper functions
-\input{./interface.tex} % public functions
+% include realisation
+\input{./code.tex}
 
 
-%% ----------------| make the module compleatted
+% assign include events
+% >> enviroment variables
+\seq_new:N             \styles@sections@entrypoints
+\seq_set_from_clist:Nn \styles@sections@entrypoints {main,appx}
+\seq_map_inline:Nn     \styles@sections@entrypoints
+{
+    \addPreLoadEvent  {sections/[\w\-]+/#1(\.tex)?\z}{\styles@sections@onLoad}
+    \addPostLoadEvent {sections/[\w\-]+/#1(\.tex)?\z}{\styles@sections@onDrop}
+}
+% >> entrypoints
+\addPreLoadEvent{sections/[\w\-]+             \z}{\styles@sections@onSection@alias}
+\addPreLoadEvent{sections/[\w\-]+/main(\.tex)?\z}{\styles@sections@onSection}
 
+
+\makeatother
 \ExplSyntaxOff

@@ -19,7 +19,9 @@ class Type2TEX:
         self.mml_tokens  = self._load_MMLtokens_()
     
     def assignToArgParser(self, parser:argparse.ArgumentParser) -> any:
-        return self
+        parser.add_argument("path",
+            help="path to a target entity")
+        return self._do_generation_
 
     def generateTokens(self):
         generator = MathMLTokenFinder(self.mmltex_path)
@@ -48,6 +50,17 @@ class Type2TEX:
             self._print_convertion_status(path0, path1, path1 != "")
 
 # private:
+    def _do_generation_(self, args):
+        callback  = self.generateEquations        
+        args.path = self._fix_path_(args.path)
+        count = args.path.count(":all:")
+        if (count == 1 and not args.path.endswith(":all:")) or count > 1:
+            raise RuntimeError(":all: placeholder must only be placed in the end of the path '{}'".format(args.path))
+        if count == 0: 
+            callback(args.path)
+            return
+        for subpath in glob.iglob(args.path.replace(":all:", "*"), recursive=False):
+            callback(subpath)
 
     # replaces :/ token to the module's root path
     def _fix_path_(self, path0:str):
@@ -59,8 +72,8 @@ class Type2TEX:
 
     def _load_MMLtokens_(self):
         tokens = json.load(open(self.tokens_path, 'r'))
-        tokens = sorted(tokens)
-        return tokens.reverse()
+        tokens = sorted(tokens, reverse=True)
+        return tokens
 
     def _generate_equation_(self, equation_path:str, bForce_gen:bool) -> str:
         tex_path = self._generate_tex_file_path(equation_path)
@@ -78,7 +91,7 @@ class Type2TEX:
         tex_path = path.relpath(path.dirname(equation_path), self.proj_path)
         tex_path = path.join(self.build_path, tex_path, tex_name + '.tex')
         tex_path = path.abspath(tex_path)
-        return tex_path
+        return self._fix_path_(tex_path)
 
     def _is_up_to_date_(self, equation_path:str, tex_path:str) -> bool:
         if not path.exists(tex_path):
@@ -145,5 +158,7 @@ class Type2TEX:
             tex_file.close()
 
     def _print_convertion_status(self, path0:str, path1:str, bDone:bool):
+        path0 = (path.relpath(path0, self.proj_path).replace("\\", "/"))
+        path1 = (path.relpath(path1, self.proj_path).replace("\\", "/") if bDone else path1)
         if bDone:   print("equation: '{}' -> '{}'".format(path0, path1))
         else:       print("equation: '{}' is up to date".format(path0))

@@ -6,13 +6,8 @@
 \usepackage{geometry }  % fields
 
 % modules
-\input{./modules/math/module}
-
-% paragraphs
-\providebool{newpoly} % polyglossia with indentfirst setting
-\boolfalse  {newpoly} % setting our new boolean flag to default false
-\indentafterchapter
-\usepackage{indentfirst}
+\input{./modules/math/module.tex}
+\input{./modules/lang/ru/module.tex}
 
 % tables
 \usepackage{longtable, ltcaption} % long tables
@@ -44,14 +39,15 @@
 \usepackage{totpages}
 
 % references
-\usepackage{cleveref}
+\usepackage[english,russian]{cleveref}
 \usepackage{kvsetkeys} 
 
 % support of white spaces in \labelcref https://tex.stackexchange.com/a/340502/104425
 \makeatletter
 \let\org@@cref\@cref
 \renewcommand*{\@cref}[2] {
-    \edef\process@me {
+    \edef\process@me 
+    {
         \noexpand\org@@cref{#1} {\zap@space#2 \@empty}
     }
     \process@me
@@ -61,7 +57,6 @@
 \usepackage{placeins} % \FloatBarrier
 
 % modules
-\input{./modules/lang/ru/module}
-\input{./modules/biblio/module}
-\input{./modules/sections/module}
-\input{./modules/frames/module}
+\input{./modules/sections/module.tex}
+\input{./modules/biblio/module.tex  }
+\input{./modules/frames/module.tex  }
