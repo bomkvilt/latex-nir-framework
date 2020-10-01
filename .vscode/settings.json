@@ -25,7 +25,7 @@
             "name": "xelatex-pdf",
             "command": "xelatex",
             "args": [
-                "--no-pdf"  ,
+                "-synctex=1",
                 "-recorder" ,
                 "-interaction=nonstopmode",
                 "-aux-directory=%OUTDIR%" ,

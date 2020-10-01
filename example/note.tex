@@ -1,12 +1,32 @@
-\documentclass[a4paper, 12pt, oneside, openany]{memoir}
+\documentclass[a4paper, 12pt, oneside, openany]{article}
 
 \include{build/framework/packages/packages/package}
 \include{build/framework/packages/styles/package}
 \setupBiblio{biblio/list.bib}
 
+\usepackage{lipsum}
 
-\begin{document}  
-    \chapter{Введение}
+
+\begin{document}
+    This a caver-like page.
+    \lipsum[1-7]
+
+    knckascskmc \par
+    jhckjascnjs \par
+    akjsnkjslkm \par
+    akjsnkjslkm \par
+    akjsnkjslkm \par
+    akjsnkjslkm \par
+
+    \setLayout{a4_port_first}
+    \section{Introduction}
+    \lipsum
+
+    \setLayout{a4_port_second}
+    \lipsum \lipsum
+    \lipsum \lipsum
+
+    \section{Введение}
     Объем и структура работы. Диссертация состоит из введения,
     заключения. Полный объём диссертации составляет включая. 
     Список литературы содержит.
@@ -15,7 +35,7 @@
     \include{sections/1-test}
     
     \pagebreak
-    \chapter*{Использование ссылок на литературы}
+    \section{Использование ссылок на литературы}
     Сошлёмся на библиографию. Заметим при этом, что ссылки должны идти вперёд списка литературы 
     при однопроходной компиляции после применения библиографического движка!
     
