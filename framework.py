@@ -1,5 +1,5 @@
-from modules.Type2TEX.module  import Type2TEX
-from modules.generator.module import Generator
+from .modules.Type2TEX.module  import Type2TEX
+from .modules.generator.module import Generator
 from os import path
 import argparse
 
