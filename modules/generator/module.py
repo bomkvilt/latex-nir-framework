@@ -114,7 +114,7 @@ class Generator:
 
     def _render_template(self, tex_path:str, tmpl_path:str, args:dict):
         template = Template(filename=self._fix_path_(tmpl_path))
-        tex_text = template.render(vars=args).replace("\n\n", "\n")
+        tex_text = template.render(vars=args).replace("\n\r", "\n").replace("\n\n", "\n")
         with open(tex_path, 'w') as tex_file:
             tex_file.write(tex_text)
             tex_file.close()
