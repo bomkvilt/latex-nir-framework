@@ -4,7 +4,7 @@
 # build directory
 /example/build/*
 !example/build/out/
-!example/build/framework
+!example/build/framework.bat
 
 # latex
 *.synctex(*)
