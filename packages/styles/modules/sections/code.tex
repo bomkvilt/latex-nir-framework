@@ -78,10 +78,17 @@
 %       \note:  the labale must be the unique for all EQUATIONS in THE section
 \NewDocumentCommand{\IncludeEquation}{ m o } 
 {
-    \begin{equation}
-        \IfValueT{#2} { \label{\styles@sections@eqsPrefix#2} }
-        \input{\frmDRootAutogen/\frmRRootEquations/#1.tex}
-    \end{equation}
+    \begingroup
+
+    \input{\frmDRootAutogen/\frmRRootEquations/#1.tex}
+
+    \IfValueTF{#2} 
+    { \printEquations[\styles@sections@eqsPrefix#2] }
+    { \printEquations                               }
+
+    \printVarExplTable{Где:}
+
+    \endgroup
 }
 
 
@@ -102,8 +109,10 @@
 
 % Create a reference on the section's equation
 %   @equation_label - a label was assigned to an equation during an insertion
-\NewDocumentCommand{\req}{ m } {
-    \secs_addReference:Nn{\styles@sections@eqsPrefix}{#1}
+\NewDocumentCommand{\req}{ m o } {
+    \IfValueTF{#2}
+    { \secs_addReference:Nn{\styles@sections@eqsPrefix}{#1--#2} }
+    { \secs_addReference:Nn{\styles@sections@eqsPrefix}{#1    } }
 }
 
 

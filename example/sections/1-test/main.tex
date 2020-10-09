@@ -21,6 +21,15 @@
 test-0.5}. Как видно происходит группировка ссылкок в диапазоны.
 \pagebreak
 
+\subsection{Сложные формулы}
+Это формулы с коментариями и описанием параметров:
+\IncludeEquation{test}[lines]
+\IncludeEquation{test2}[flat]
+
+Это ссылки на композитные формулы. label1: \req{lines}[lable1], label2: \req{lines}[label2]. \par
+Это ссылка на моноблочную формулу: \req{flat}.
+
+
 \subsection{Картинки}
 Теперь вставим изображения. Это фото Дональда Кнута:
 \IncludeFigure{knuth1}\bigbreak
