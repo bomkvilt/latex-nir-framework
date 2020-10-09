@@ -17,3 +17,30 @@
     separate-uncertainty,
 ]{siunitx}
 \sisetup{inter-unit-product = \ensuremath{{}\cdot{}}}
+
+
+% -----------------| feet equation to page: https://stackoverflow.com/a/55750239
+% <<
+\usepackage{environ } % provides \BODY
+\usepackage{etoolbox} % provides \ifdimcomp
+\usepackage{graphicx} % provides \resizebox
+
+\newlength{\myl}
+\let\origequation=\equation
+\let\origendequation=\endequation
+
+\RenewEnviron{equation}
+{
+    \settowidth{\myl}{$\BODY$}
+    \origequation
+    \ifdimcomp{\the\linewidth}{>}{\the\myl}
+    { 
+        \ensuremath{\BODY} 
+    }
+    { 
+        \resizebox{\linewidth - 10mm}{!}{\ensuremath{\BODY}}
+    }
+    \origendequation
+}
+% <<
+% -----------------|
