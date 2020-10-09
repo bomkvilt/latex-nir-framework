@@ -12,13 +12,17 @@ class MathMLTokenFinder:
         for xsl_path in glob.iglob(path.join(self.scan_root + '*.xsl')):
             xsl_file = open(xsl_path, 'r')
             xsl_text = xsl_file.read()
-            xsl_toks = re.findall(r'<xsl:template match="m:(\w+)">', xsl_text)
-            xsl_toks_found += xsl_toks
-        return list(set(xsl_toks_found))
+            xsl_atrs = re.findall(r'<xsl:template match="([\w\:\|]+)">', xsl_text)
+            
+            for atr in xsl_atrs: 
+                atrs = atr.split('|')
+                atrs = filter(lambda a: a.startswith('m:'), atrs)
+                xsl_toks_found += [cls.replace('m:', '') for cls in atrs]
+        return sorted(list(set(xsl_toks_found)))
 
     def saveTokens(self, xsl_toks_path):
         with open(xsl_toks_path, 'w') as xsl_tok_file:
-            json.dump(self.xsl_toks, xsl_tok_file)
+            json.dump(self.xsl_toks, xsl_tok_file, indent=4)
             xsl_tok_file.close()
 
 # -------| main

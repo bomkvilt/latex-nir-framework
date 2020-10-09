@@ -1,9 +1,10 @@
 from .utiles.mathMLTokenFinder import MathMLTokenFinder
-from .MMLFrontend              import MMLFrontend
-from .TeXBackend               import TeXBackend
+from .MMLFrontend import MMLFrontend
+from .TeXBackend import TeXBackend
 from argparse import ArgumentParser as AP
-from glob     import iglob          as IG
-from os       import path
+from glob import iglob as IG
+from os import path
+import os
 
 
 
@@ -92,6 +93,7 @@ class Type2TEX:
         return open(equationPath, 'r').read()
 
     def _saveEquation(self, texText:list, texPath:str):
+        os.makedirs(os.path.dirname(texPath), exist_ok = True)
         with open(texPath, 'w', encoding="utf-8") as file:
             file.write(texText)
             file.close()
