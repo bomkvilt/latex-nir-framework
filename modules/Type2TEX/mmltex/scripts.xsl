@@ -136,6 +136,26 @@
 			<xsl:apply-templates select="./*[1]"/>
 			<xsl:text>}</xsl:text>
 		</xsl:when>
+		<xsl:when test="$over='&#x02D9;'"> <!-- dot above: 1 -->
+			<xsl:text>\dot{</xsl:text>
+			<xsl:apply-templates select="./*[1]"/>
+			<xsl:text>}</xsl:text>
+		</xsl:when>
+		<xsl:when test="$over='&#x00A8;'"> <!-- dot above: 2 -->
+			<xsl:text>\ddot{</xsl:text>
+			<xsl:apply-templates select="./*[1]"/>
+			<xsl:text>}</xsl:text>
+		</xsl:when>
+		<xsl:when test="$over='&#x20DB;'"> <!-- dot above: 3 -->
+			<xsl:text>\dddot{</xsl:text>
+			<xsl:apply-templates select="./*[1]"/>
+			<xsl:text>}</xsl:text>
+		</xsl:when>
+		<xsl:when test="$over='&#x20DC;'"> <!-- dot above: 4 -->
+			<xsl:text>\ddddot{</xsl:text>
+			<xsl:apply-templates select="./*[1]"/>
+			<xsl:text>}</xsl:text>
+		</xsl:when>
 		<xsl:when test="translate($base,'&#x0220F;&#x02210;&#x022c2;&#x022c3;&#x02294;',
 						'&#x02211;&#x02211;&#x02211;&#x02211;&#x02211;')='&#x02211;'">
 <!-- if $base is operator, such as
