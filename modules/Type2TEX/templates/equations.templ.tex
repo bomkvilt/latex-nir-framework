@@ -16,8 +16,15 @@ ${'%   #1 - label      '}
         % elif len(eqs) == 1:
         \IfValueT{#1} { \label{#1} }
         % endif
+
+        % if eq['bTall']:
+        \renewcommand{\arraystretch}{2}
+        % else:
+        \renewcommand{\arraystretch}{1}
+        % endif        
         ${eq['text']}
     \end{equation}
+    
     % endfor
 
     % elif vars['mode'] == 'flat':
@@ -25,8 +32,14 @@ ${'%   #1 - label      '}
         \IfValueT{#1} { \label{#1} }
         \begin{array}{l}
             % for eq in eqs:
+            % if eq['bTall']:
+            \renewcommand{\arraystretch}{2}
+            % else:
+            \renewcommand{\arraystretch}{1}
+            % endif
+
             ${eq['text']} \\\
-            
+
             % endfor
         \end{array} 
     \end{equation}

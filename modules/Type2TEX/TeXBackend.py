@@ -1,5 +1,6 @@
 from ..common      import static_vars
 from mako.template import Template
+from functools     import reduce
 from os import path
 import re
 
@@ -165,6 +166,7 @@ class _TeXProcessor:
             data.append({
                 'text' : line if not m else stat.label.sub('', line),
                 'label': ''   if not m else m.group(1),
+                'bTall': reduce(lambda a, b: a or b, [test in line for test in ['\\frac', '\\dfrac']]),
             })
         return data
 
@@ -187,6 +189,7 @@ class _TeXProcessor:
             'equations': self._equationData,
             'varexpls' : self._varExpls,
             'mode'     : self._getEquationMode(),
+            'bTall'    : reduce(lambda a, b: a['bTall'] or b['bTall'], self._equationData),
         }).replace('\r', '').replace('\n\n', '\n')
 
     def _getEquationMode(self):
