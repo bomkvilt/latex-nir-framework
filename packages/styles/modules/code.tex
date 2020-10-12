@@ -1,17 +1,19 @@
-\usepackage{ifthen}
-
-
-%%% open code-specific environment
-\NewDocumentCommand{\texCode}{ m }
+\addModuleCode
 {
-    \ifthenelse{\equal{#1}{<<}}
+    \usepackage{ifthen}
+    
+    %%% open code-specific environment
+    \NewDocumentCommand{\texCode}{ m }
     {
-        \ExplSyntaxOn
-        \makeatletter
-    } {}
-    \ifthenelse{\equal{#1}{>>}}
-    {
-        \makeatother
-        \ExplSyntaxOff
-    } {}
-}
+        \ifthenelse{\equal{#1}{<<}}
+        {
+            \ExplSyntaxOn
+            \makeatletter
+        } {}
+        \ifthenelse{\equal{#1}{>>}}
+        {
+            \makeatother
+            \ExplSyntaxOff
+        } {}
+    }
+}{}

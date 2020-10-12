@@ -1,46 +1,49 @@
-
-\usepackage{amsthm,amsmath,amscd}   % Математические дополнения от AMS
-\usepackage{amsfonts,amssymb}       % Математические дополнения от AMS
-\usepackage{mathtools}              % Добавляет окружение multlined
-\usepackage{xfrac}                  % Красивые дроби
-\usepackage{unicode-math}           % unicode letter in math mode
-\usepackage[
-    locale = DE,
-    list-separator       = {;\,},
-    list-final-separator = {;\,},
-    list-pair-separator  = {;\,},
-    list-units           = single,
-    range-units          = single,
-    range-phrase         = {\text{\ensuremath{-}}},
-    quotient-mode        = fraction,
-    fraction-function    = \sfrac,
-    separate-uncertainty,
-]{siunitx}
-\sisetup{inter-unit-product = \ensuremath{{}\cdot{}}}
-
-
-% -----------------| feet equation to page: https://stackoverflow.com/a/55750239
-% <<
-\usepackage{environ } % provides \BODY
-\usepackage{etoolbox} % provides \ifdimcomp
-\usepackage{graphicx} % provides \resizebox
-
-\newlength{\myl}
-\let\origequation=\equation
-\let\origendequation=\endequation
-
-\RenewEnviron{equation}
+\addModuleCode
 {
-    \settowidth{\myl}{$\BODY$}
-    \origequation
-    \ifdimcomp{\the\linewidth}{>}{\the\myl}
-    { 
-        \ensuremath{\BODY} 
+    \usepackage{amsthm,amsmath,amscd}   % Математические дополнения от AMS
+    \usepackage{amsfonts,amssymb}       % Математические дополнения от AMS
+    \usepackage{mathtools}              % Добавляет окружение multlined
+    \usepackage{xfrac}                  % Красивые дроби
+    \usepackage{unicode-math}           % unicode letter in math mode
+    \usepackage[
+        locale = DE,
+        list-separator       = {;\,},
+        list-final-separator = {;\,},
+        list-pair-separator  = {;\,},
+        list-units           = single,
+        range-units          = single,
+        range-phrase         = {\text{\ensuremath{-}}},
+        quotient-mode        = fraction,
+        fraction-function    = \sfrac,
+        separate-uncertainty,
+    ]{siunitx}
+    \usepackage{environ } % provides \BODY
+    \usepackage{etoolbox} % provides \ifdimcomp
+    \usepackage{graphicx} % provides \resizebox
+
+} {
+    \sisetup{inter-unit-product = \ensuremath{{}\cdot{}}}
+
+
+    % -----------------| feet equation to page: https://stackoverflow.com/a/55750239
+    % <<
+    \newlength{\myl}
+    \let\origequation=\equation
+    \let\origendequation=\endequation
+
+    \RenewEnviron{equation}
+    {
+        \settowidth{\myl}{$\BODY$}
+        \origequation
+        \ifdimcomp{\the\linewidth}{>}{\the\myl}
+        { 
+            \ensuremath{\BODY} 
+        }
+        { 
+            \resizebox{\linewidth - 10mm}{!}{\ensuremath{\BODY}}
+        }
+        \origendequation
     }
-    { 
-        \resizebox{\linewidth - 10mm}{!}{\ensuremath{\BODY}}
-    }
-    \origendequation
+    % <<
+    % -----------------|
 }
-% <<
-% -----------------|

@@ -1,65 +1,86 @@
+\input{./modules.tex}
 
-% common packages
-\usepackage{comment  } % 
-\usepackage{etoolbox } % usefull tools
-\usepackage{pdflscape} % album layout
-\usepackage{geometry } % fields
-\usepackage{atbegshi } % output routine callbacks
-
+% load common packages
+\addModuleCode
+{
+    \usepackage{comment  } % 
+    \usepackage{etoolbox } % usefull tools
+    \usepackage{pdflscape} % album layout
+    \usepackage{geometry } % fields
+    \usepackage{atbegshi } % output routine callbacks
+}{}
 
 % modules
 \input{./modules/code.tex }
 \input{./modules/math.tex }
 \input{./modules/lang/ru.tex}
 
-% tables
-\usepackage{longtable, ltcaption} % long tables
-\usepackage{multirow,  makecell } % improved table formatting
-\usepackage{tabu,      tabulary } % automatic table row width. \note: \tabu must be colled before \hyperref
-\usepackage{threeparttable}       % automatic table caption's width
+\addModuleCode
+{   % tables
+    \usepackage{longtable, ltcaption} % long tables
+    \usepackage{multirow,  makecell } % improved table formatting
+    \usepackage{tabu,      tabulary } % automatic table row width. \note: \tabu must be colled before \hyperref
+    \usepackage{threeparttable}       % automatic table caption's width
+}{}
 
-% common typography
-\usepackage{soulutf8} % multiline underlines and strikethroughs
-\usepackage{icomma}   % support of comma in equations' digits
-\usepackage[hyphenation, lastparline]{impnattypo}
+\addModuleCode
+{   % common typography
+    \usepackage{soulutf8} % multiline underlines and strikethroughs
+    \usepackage{icomma}   % support of comma in equations' digits
+    \usepackage[hyphenation, lastparline]{impnattypo}
+}{}
 
-% vector graphics
-\usepackage{tikz}
+\addModuleCode
+{   % vector graphics
+    \usepackage{tikz}
+}{}
 
-% hyperrefs
-\usepackage[hidelinks]{hyperref}
+\addModuleCode
+{   % hyperrefs
+    \usepackage[hidelinks]{hyperref}
+}{}
 
-% figures
-\usepackage{graphicx}
-\usepackage{caption }
-\usepackage{subcaption}
-\usepackage{pdfpages}   % extarnal PDF files
+\addModuleCode 
+{   % figures
+    \usepackage{graphicx}
+    \usepackage{caption }
+    \usepackage{subcaption}
+    \usepackage{pdfpages}   % external PDF files
+}{}
 
+\addModuleCode
+{   % counters
+    \usepackage[figure,table]{totalcount}
+    \usepackage{totcount}
+    \usepackage{totpages}
+}{}
 
-% counters
-\usepackage[figure,table]{totalcount}
-\usepackage{totcount}
-\usepackage{totpages}
-
-% references
-\usepackage[english,russian]{cleveref}
-\usepackage{kvsetkeys} 
-
-% support of white spaces in \labelcref https://tex.stackexchange.com/a/340502/104425
 \makeatletter
-\let\org@@cref\@cref
-\renewcommand*{\@cref}[2] {
-    \edef\process@me 
+\addModuleCode
+{   % references
+    \usepackage[english,russian]{cleveref}
+    \usepackage{kvsetkeys} 
+} {
+    % support of white spaces in \labelcref https://tex.stackexchange.com/a/340502/104425
+    \let\org@@cref\@cref
+    \renewcommand*{\@cref}[2] 
     {
-        \noexpand\org@@cref{#1} {\zap@space#2 \@empty}
+        \edef \process@me 
+        {
+            \noexpand\org@@cref{#1} {\zap@space#2 \@empty}
+        }
+        \process@me
     }
-    \process@me
 }
 \makeatother
 
-\usepackage{placeins} % \FloatBarrier
+\addModuleCode
+{
+    \usepackage{placeins} % \FloatBarrier
+}{}
 
 % modules
 \input{./modules/sections/module.tex}
 \input{./modules/biblio.tex}
 \input{./modules/frames.tex}
+\input{./modules/acronyms.tex}

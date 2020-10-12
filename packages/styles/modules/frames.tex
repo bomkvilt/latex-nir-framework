@@ -1,7 +1,8 @@
-\usepackage{afterpage}
-
-
 \texCode{<<}
+\addModuleCode
+{
+    \usepackage{afterpage}
+} {
     % current frame callback
     \def\frame@clb {}
 
@@ -200,10 +201,8 @@
     \NewDocumentCommand{\frames@stamp@end}{ m }
     {
     }
-\texCode{>>}
 
 
-\makeatletter
     % set default page settings
     \frames@setLayout{a4_port_none}
     \setcounter{page}{0}
@@ -214,4 +213,5 @@
     \def\@oddhead { \frames@stamp    {\thepage} }
     \def\@evenfoot{ \frames@stamp@end{\thepage} }
     \def\@oddfoot { \frames@stamp@end{\thepage} }
-\makeatother
+}
+\texCode{>>}

@@ -1,6 +1,4 @@
 
-\usepackage{xifthen }
-
 % -----------------| callbacks.begin
 % >>
 
@@ -101,7 +99,7 @@
 \NewDocumentCommand{\IncludeFigure}{ m o o O{ }} {
     \begin{figure}[ht]
         \centering\includegraphics[#4]{#1}
-        \IfValueT{#3} { \caption{#3}                }
+        \IfValueT{#3} { \caption{#3} }
         \IfValueT{#2} { \label{\styles@sections@figPrefix#2} }
     \end{figure}
 }

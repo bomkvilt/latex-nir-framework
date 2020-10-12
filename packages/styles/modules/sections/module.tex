@@ -1,35 +1,34 @@
-\ExplSyntaxOn
 \makeatletter
-
-% module-wide constants
-\seq_new:N  \styles@sections@g@addedSections_seq
-\seq_new:N  \styles@sections@g@knownAppendices_seq
-\bool_new:N \styles@sections@g@bInSection
-
-
-% settings
-% \todo: make overrideable
-\str_new:N   \styles@sections@autogen
-\str_gset:Nn \styles@sections@autogen {[autogen].tex}
-
-
-% include realisation
-\input{./code.tex}
-
-
-% assign include events
-% >> enviroment variables
-\seq_new:N             \styles@sections@entrypoints
-\seq_set_from_clist:Nn \styles@sections@entrypoints {main,appx}
-\seq_map_inline:Nn     \styles@sections@entrypoints
+\ExplSyntaxOn
+\addModuleCode 
 {
-    \addPreLoadEvent  {sections/[\w\-]+/#1(\.tex)?\z}{\styles@sections@onLoad}
-    \addPostLoadEvent {sections/[\w\-]+/#1(\.tex)?\z}{\styles@sections@onDrop}
+    \usepackage{xifthen}
+    \input{./code.tex}
+} {
+
+    % module-wide constants
+    \seq_new:N  \styles@sections@g@addedSections_seq
+    \seq_new:N  \styles@sections@g@knownAppendices_seq
+    \bool_new:N \styles@sections@g@bInSection
+
+    % settings
+    % \todo: make overrideable
+    \str_new:N   \styles@sections@autogen
+    \str_gset:Nn \styles@sections@autogen {[autogen].tex}
+
+    % assign include events
+    % >> enviroment variables
+    \seq_new:N             \styles@sections@entrypoints
+    \seq_set_from_clist:Nn \styles@sections@entrypoints {main,appx}
+    \seq_map_inline:Nn     \styles@sections@entrypoints
+    {
+        \addPreLoadEvent  {sections/[\w\-]+/#1(\.tex)?\z}{\styles@sections@onLoad}
+        \addPostLoadEvent {sections/[\w\-]+/#1(\.tex)?\z}{\styles@sections@onDrop}
+    }
+    % >> entrypoints
+    \addPreLoadEvent{sections/[\w\-]+             \z}{\styles@sections@onSection@alias}
+    \addPreLoadEvent{sections/[\w\-]+/main(\.tex)?\z}{\styles@sections@onSection}
+    
 }
-% >> entrypoints
-\addPreLoadEvent{sections/[\w\-]+             \z}{\styles@sections@onSection@alias}
-\addPreLoadEvent{sections/[\w\-]+/main(\.tex)?\z}{\styles@sections@onSection}
-
-
-\makeatother
 \ExplSyntaxOff
+\makeatother
