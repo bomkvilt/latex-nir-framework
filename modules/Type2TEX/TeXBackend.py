@@ -61,7 +61,7 @@ class _TeXProcessor:
     @static_vars( 
         dropRules = ['\u200b', '$' , '\r'],
         replRules = {
-            '\\right\\': '\\right.',
+            '\\right\\ ': '\\right.',
         })
     def _sanitizeEquatoin(self, s={}):
         for char in s.dropRules:

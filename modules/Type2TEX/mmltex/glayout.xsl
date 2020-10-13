@@ -128,6 +128,9 @@
 		</xsl:otherwise>
 	</xsl:choose>
 	<xsl:choose>
+		<xsl:when test="@close=''">
+			<xsl:text>\right.</xsl:text>
+		</xsl:when>
 		<xsl:when test="@close">
 			<xsl:if test="translate(@open,'{}[]()|','{{{{{{{')='{'">
 				<xsl:text>\right</xsl:text>
