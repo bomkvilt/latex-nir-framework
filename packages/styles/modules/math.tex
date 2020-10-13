@@ -1,3 +1,4 @@
+\texCode{<<}
 \addModuleCode
 {
     \usepackage{amsthm,amsmath,amscd}   % Математические дополнения от AMS
@@ -27,23 +28,26 @@
 
     % -----------------| feet equation to page: https://stackoverflow.com/a/55750239
     % <<
-    \newlength{\myl}
-    \let\origequation=\equation
-    \let\origendequation=\endequation
+    \newlength{\math@eqlen}
+    \newlength{\math@offset} \setlength{\math@offset}{15mm}
+    \let\math@old@equation@bgn=\equation
+    \let\math@old@equation@end=\endequation
 
     \RenewEnviron{equation}
     {
-        \settowidth{\myl}{$\BODY$}
-        \origequation
-        \ifdimcomp{\the\linewidth}{>}{\the\myl}
+        \settowidth{\math@eqlen}{$\BODY$}
+        
+        \math@old@equation@bgn
+        \ifdimcomp{\linewidth - \math@offset}{>}{\math@eqlen}
         { 
             \ensuremath{\BODY} 
         }
         { 
-            \resizebox{\linewidth - 10mm}{!}{\ensuremath{\BODY}}
+            \resizebox{\linewidth - \math@offset}{!}{\ensuremath{\BODY}}
         }
-        \origendequation
+        \math@old@equation@end
     }
     % <<
     % -----------------|
 }
+\texCode{>>}
