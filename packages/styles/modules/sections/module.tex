@@ -1,34 +1,11 @@
-\makeatletter
-\ExplSyntaxOn
+\texCode{<<}
 \addModuleCode 
 {
-    \usepackage{xifthen}
-    \input{./code.tex}
-} {
-
-    % module-wide constants
-    \seq_new:N  \styles@sections@g@addedSections_seq
-    \seq_new:N  \styles@sections@g@knownAppendices_seq
-    \bool_new:N \styles@sections@g@bInSection
-
-    % settings
-    % \todo: make overrideable
-    \str_new:N   \styles@sections@autogen
-    \str_gset:Nn \styles@sections@autogen {[autogen].tex}
-
-    % assign include events
-    % >> enviroment variables
-    \seq_new:N             \styles@sections@entrypoints
-    \seq_set_from_clist:Nn \styles@sections@entrypoints {main,appx}
-    \seq_map_inline:Nn     \styles@sections@entrypoints
-    {
-        \addPreLoadEvent  {sections/[\w\-]+/#1(\.tex)?\z}{\styles@sections@onLoad}
-        \addPostLoadEvent {sections/[\w\-]+/#1(\.tex)?\z}{\styles@sections@onDrop}
-    }
-    % >> entrypoints
-    \addPreLoadEvent{sections/[\w\-]+             \z}{\styles@sections@onSection@alias}
-    \addPreLoadEvent{sections/[\w\-]+/main(\.tex)?\z}{\styles@sections@onSection}
-    
-}
-\ExplSyntaxOff
-\makeatother
+    \input{./base.tex}
+    \input{./callbacks.tex}
+    \input{./resoures/prefixes.tex}
+    \input{./resoures/common.tex}
+    \input{./resoures/equations.tex}
+    \input{./resoures/figures.tex}
+}{}
+\texCode{>>}

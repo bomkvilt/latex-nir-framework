@@ -1,0 +1,77 @@
+% -----------------| events.bgn
+% >>
+
+\seq_new:N   \sections@clb@entryFiles 
+\seq_push:Nx \sections@clb@entryFiles {\sections@const@maintext_str}
+\seq_push:Nx \sections@clb@entryFiles {\sections@const@appendix_str}
+
+\seq_new:N   \sections@clb@entryRoots
+\seq_push:Nx \sections@clb@entryRoots {\sections@const@sections_str}
+
+\seq_new:N   \sections@clb@entryParts
+\seq_push:Nx \sections@clb@entryParts {\sections@const@subsecs_str}
+
+% section entrypoints
+\seq_map_inline:Nn \sections@clb@entryRoots
+{
+    \seq_map_inline:Nn \sections@clb@entryFiles
+    {
+        \addPreLoadEvent {#1/[\w\-\ ]+/##1(\.tex)?\z}{\sections@onLoad}
+        \addPostLoadEvent{#1/[\w\-\ ]+/##1(\.tex)?\z}{\sections@onDrop}
+    }
+}
+
+% main section entrypoint's alias
+\seq_map_inline:Nn \sections@clb@entryRoots
+{
+    \addPreLoadEvent{#1/[\w\-\ ]+\z}{\sections@onSection}
+}
+
+% subsection entrypoints
+\seq_map_inline:Nn \sections@clb@entryRoots
+{
+    \seq_map_inline:Nn \sections@clb@entryParts
+    {
+        \addPreLoadEvent {#1/[\w\-\ ]+/##1/[\w\-\ ]+(\.tex)?\z}{\sections@part@onLoad}
+        \addPostLoadEvent{#1/[\w\-\ ]+/##1/[\w\-\ ]+(\.tex)?\z}{\sections@part@onDrop}
+    }
+}
+
+% >>
+% -----------------| events.end
+% -----------------| 
+% >>
+
+\NewDocumentCommand{\sections@onLoad}{}
+{
+    \sections@frame@bgn
+
+    \str_if_eq:VVT \frmNameSection \sections@const@maintext_str
+    {
+        \sections@register
+    }
+}
+
+\NewDocumentCommand{\sections@onDrop}{}
+{
+    \sections@frame@end
+}
+
+\NewDocumentCommand{\sections@onSection}{}
+{
+    \include{\curfile/main}
+    \dontIncludeSelf
+}
+
+\NewDocumentCommand{\sections@part@onLoad}{}
+{
+    \sections@part@bgn
+}
+
+\NewDocumentCommand{\sections@part@onDrop}{}
+{
+    \sections@part@end
+}
+
+% >>
+% -----------------|

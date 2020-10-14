@@ -1,0 +1,36 @@
+% -----------------| initialisation.bgn
+% >>
+
+\sections@@@{\sections@@onSection@bgn}
+{
+    \graphicspath{ {\frmDSectionPath/\frmRRootFigures/} {\frmRRootFigures/} }
+}
+
+
+% >>
+% -----------------| initialisation.end
+% -----------------| 
+% >>
+
+%%% Include a figure into a section
+%   #1  - /fig - relative figure path
+%   #2  - the figure's lable (unique for all FIGURES in THE section)
+%   #3  - the image's caption
+%   #3  - settings forwards into a \includegraphics function
+\NewDocumentCommand{\addFigure}{ m o o O{ }} {
+    \begin{figure}[ht]
+        \centering\includegraphics[#4]{#1}
+        \IfValueT{#3} { \caption{#3} }
+        \IfValueT{#2} { \label{\sections@figPrefix#2} }
+    \end{figure}
+}
+
+% Create a reference on the section's figure
+%   #1  - a label was assigned to a figure during an insertion
+\NewDocumentCommand{\rfg}{ m } 
+{
+    \secs_addReference:Nn{\sections@figPrefix}{#1}
+}
+
+% >>
+% -----------------| 
