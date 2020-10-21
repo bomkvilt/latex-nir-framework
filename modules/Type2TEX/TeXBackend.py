@@ -178,7 +178,7 @@ class _TeXProcessor:
             data.append({
                 'text' : line if not m else stat.label.sub('', line),
                 'label': ''   if not m else m.group(1),
-                'bTall': reduce(lambda a, b: a or b, [test in line for test in ['\\frac', '\\dfrac']]),
+                'bTall': reduce(lambda a, b: a or b, [test in line for test in ['\\frac', '\\dfrac', '{array}']]),
             })
         return data
 
