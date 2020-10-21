@@ -90,18 +90,30 @@ class _TeXProcessor:
             '"' r'(.*?)'  # ; <key>
             '"' r'(.*)'   # ; <value>
             '\](?:\\\\)?' #
+        ),
+        texDrop = re.compile(''
+            r'\\text{(.*?)}'
         ))
     def _extractExplanations(self, stat={}):
         # find all variable explanation blocks
         for m in stat.shape.finditer(self._texText):
             line = m.group(1)
-            for tag in [r'\left', r'\right', r'\text{', '}']:
-                line = line.replace(tag, '')
+            for tag, repl in {
+                r'\left[': '[', 
+                r'\right]': ']'
+            }.items():
+                line = line.replace(tag, repl)
+
+            bDone = False
+            while not bDone:
+                oldLine = line
+                line = stat.texDrop.sub(r'\1', line)
+                bDone = oldLine == line
             
             m = stat.parts.match(line)
             if not m: raise RuntimeError('\n'
                 'Incorrect variable explanation format: {}.\n'
-                'The line must match pattern [" <variable>" <text>]'
+                'The line must match pattern ["<variable>"<text>]'
                 ''.format(line)
             )
 

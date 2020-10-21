@@ -156,6 +156,11 @@
 			<xsl:apply-templates select="./*[1]"/>
 			<xsl:text>}</xsl:text>
 		</xsl:when>
+		<xsl:when test="$over='&#x005E;'"> <!-- hat -->
+			<xsl:text>\hat{</xsl:text>
+			<xsl:apply-templates select="./*[1]"/>
+			<xsl:text>}</xsl:text>
+		</xsl:when>
 		<xsl:when test="translate($base,'&#x0220F;&#x02210;&#x022c2;&#x022c3;&#x02294;',
 						'&#x02211;&#x02211;&#x02211;&#x02211;&#x02211;')='&#x02211;'">
 <!-- if $base is operator, such as
