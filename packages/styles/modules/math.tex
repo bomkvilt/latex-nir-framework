@@ -6,6 +6,9 @@
     \usepackage{mathtools}              % Добавляет окружение multlined
     \usepackage{xfrac}                  % Красивые дроби
     \usepackage{unicode-math}           % unicode letter in math mode
+    \usepackage{esvect}                 % vector sign above letters
+    \usepackage{yhmath}                 % 
+    \usepackage{accents}                % 
     \usepackage[
         locale = DE,
         list-separator       = {;\,},
@@ -22,6 +25,13 @@
     \usepackage{etoolbox} % provides \ifdimcomp
     \usepackage{graphicx} % provides \resizebox
 
+    %%% -------------------------| math symbols.bgn
+    % >>
+    
+    \def\cc#1{\accentset{\circ}{#1}}
+    
+    % >>
+    %%% -------------------------| math symbols.end
 } {
     \sisetup{inter-unit-product = \ensuremath{{}\cdot{}}}
 
