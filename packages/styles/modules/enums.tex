@@ -1,0 +1,30 @@
+\texCode{<<}
+\addModuleCode
+{
+    \usepackage{enumitem}
+    \usepackage{paralist}
+
+    \bool_new:N \enums@bCompact
+
+    \newlist{enum}{enumerate}{6}
+    \setlist[enum]{
+        rightmargin   = 0pt,
+        labelsep      = 5pt,
+        labelwidth    = 20pt,
+        itemindent    = 0pt,
+        listparindent = 0pt,
+        topsep        = 0pt,
+        partopsep     = 0pt,
+        parsep        = 0pt,
+        itemsep       = 0pt,
+        label  = \arabic*.,
+        before = \raggedright   
+    }
+    \setlist[enum,1]{leftmargin = 20mm, after *= \medskip}
+    \setlist[enum,2]{leftmargin = 25mm}
+    \setlist[enum,3]{leftmargin = 30mm}
+    \setlist[enum,4]{leftmargin = 35mm}
+    \setlist[enum,5]{leftmargin = 40mm}
+    \setlist[enum,6]{leftmargin = 45mm}
+}{}
+\texCode{>>}
