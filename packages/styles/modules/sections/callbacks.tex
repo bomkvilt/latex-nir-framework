@@ -16,8 +16,8 @@
 {
     \seq_map_inline:Nn \sections@clb@entryFiles
     {
-        \addPreLoadEvent {#1/[\w\-\ ]+/##1(\.tex)?\z}{\sections@onLoad}
-        \addPostLoadEvent{#1/[\w\-\ ]+/##1(\.tex)?\z}{\sections@onDrop}
+        \addPreLoadEvent {#1/[\w\-\ \.]+/##1(\.tex)?\z}{\sections@onLoad}
+        \addPostLoadEvent{#1/[\w\-\ \.]+/##1(\.tex)?\z}{\sections@onDrop}
     }
 }
 
@@ -32,8 +32,8 @@
 {
     \seq_map_inline:Nn \sections@clb@entryParts
     {
-        \addPreLoadEvent {#1/[\w\-\ ]+/##1/[\w\-\ ]+(\.tex)?\z}{\sections@part@onLoad}
-        \addPostLoadEvent{#1/[\w\-\ ]+/##1/[\w\-\ ]+(\.tex)?\z}{\sections@part@onDrop}
+        \addPreLoadEvent {#1/[\w\-\ \.]+/##1/[\w\-\ \.]+(\.tex)?\z}{\sections@part@onLoad}
+        \addPostLoadEvent{#1/[\w\-\ \.]+/##1/[\w\-\ \.]+(\.tex)?\z}{\sections@part@onDrop}
     }
 }
 
