@@ -1,0 +1,13 @@
+
+%%% include an equation into a section
+%   #1  - table path
+%   #2  - table labeling
+%   #3  - table caption
+\NewDocumentCommand{\addTable}{ m o o }
+{{
+    \begin{table}[ht]
+        \IfValueT{#3} { \caption{#3} }
+        \input{\frmDRootAutogen/\frmRRootDocs/#1.tex}
+        \IfValueT{#2} { \label{\sections@tabPrefix#2} }
+    \end{table}
+}}

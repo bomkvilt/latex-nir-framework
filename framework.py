@@ -1,5 +1,6 @@
 from .modules.Type2TEX.module  import Type2TEX
 from .modules.generator.module import Generator
+from .modules.XLSX2TeX.module  import XLSX2TeX
 from os import path
 import argparse
 
@@ -20,6 +21,7 @@ class Framework:
                 src_fig_name=src_fig_name,
                 src_eqs_name=src_eqs_name,
             ),
+            "xlsx2tex": XLSX2TeX(build_path=build_path, proj_path=proj_path),
         }
         self._argparser = self._create_parser_()
 

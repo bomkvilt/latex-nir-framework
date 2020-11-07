@@ -69,14 +69,11 @@ class Type2TEX:
 
     def _isUpToDate(self, equationPath:str, texPath:str) -> bool:
         if not path.exists(texPath):
-            return False
-        
+            return False        
         if not path.exists(equationPath):
-            raise RuntimeError('source .eps equation doesn`t exist : "{}"'.format(equationPath))
-        
+            raise RuntimeError('source .eps equation doesn`t exist : "{}"'.format(equationPath))        
         if path.isdir(texPath):
-            raise RuntimeError('destination file is a directory: "{}"'.format(texPath))
-        
+            raise RuntimeError('destination file is a directory: "{}"'.format(texPath))        
         # if .tex file is older than .eps one
         time0 = path.getmtime(equationPath)
         time1 = path.getmtime(texPath)

@@ -42,13 +42,16 @@
 % -----------------| 
 % >>
 
+\bool_new:N \sections@bMain
+
 \NewDocumentCommand{\sections@onLoad}{}
 {
     \sections@frame@bgn
 
-    \str_if_eq:VVT \frmNameSection \sections@const@maintext_str
-    {
-        \sections@register
+    \bool_if:NT \sections@bMain
+    {   
+        \bool_gset_false:N \sections@bMain
+        % \sections@register
     }
 }
 
@@ -59,6 +62,7 @@
 
 \NewDocumentCommand{\sections@onSection}{}
 {
+    \bool_gset_true:N \sections@bMain
     \include{\curfile/main}
     \dontIncludeSelf
 }

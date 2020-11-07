@@ -48,7 +48,7 @@
     {
         \msg_term:nnx {sections}{appendix_already_added}{#1}
     } {}
-    \seq_gpush:Nn \sections@reg@appendixPaths_seq {#1}
+    \seq_gpush:Nx \sections@reg@appendixPaths_seq {#1}
 }
 \msg_new:nnn {sections}{appendix_already_added}
 {
@@ -107,7 +107,7 @@
 
     \IfFileExists{\curdir/\sections@const@appendix_str.tex}
     {
-        \sections@addAppendix{\frmNameSection}
+        % \sections@addAppendix{\curdir}
     }
 }
 
@@ -136,3 +136,12 @@
 
 % >>
 % -----------------| main.end
+
+\NewDocumentCommand{\addAppendices}{ s }
+{
+    \seq_map_inline:Nn \sections@reg@appendixPaths_seq
+    {
+        \typeout{+++++++|##1/\sections@const@appendix_str.tex|}
+        \include{##1/\sections@const@appendix_str}
+    }
+}

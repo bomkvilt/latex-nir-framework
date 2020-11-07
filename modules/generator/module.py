@@ -10,6 +10,7 @@ class Generator:
         
         src_eqs_name:str     = "eqs",           # section-relative path to equations root
         src_fig_name:str     = "fig",           # section-relative path to figures   root
+        src_doc_name:str     = "docs",          # section-relative path to figures   root
         gen_module_name:str  = "[autogen].tex", # name of module's  generated path
         gen_section_name:str = "[autogen].tex", # name of section's generated path
     ):
@@ -24,6 +25,7 @@ class Generator:
 
         self._src_eqs_name     = src_eqs_name
         self._src_fig_name     = src_fig_name
+        self._src_doc_name     = src_doc_name
         self._gen_module_name  = gen_module_name
         self._gen_section_name = gen_section_name
 
@@ -81,6 +83,11 @@ class Generator:
                 'var': "frmRRootFigures",
                 'val': self._src_fig_name,
                 'exp': "section-relative path to figures root directory",
+            },
+            {
+                'var': "frmRRootDocs",
+                'val': self._src_doc_name,
+                'exp': "section-relative path to document root directory",
             },
             {
                 'var': "frmRRootDocument",
