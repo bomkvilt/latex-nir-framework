@@ -15,12 +15,15 @@
 %%% Include a figure into a section
 %   #1  - /fig - relative figure path
 %   #2  - the figure's lable (unique for all FIGURES in THE section)
-%   #3  - the image's caption
-%   #3  - settings forwards into a \includegraphics function
-\NewDocumentCommand{\addFigure}{ m o o O{ }} {
-    \begin{figure}[ht]
-        \centering\includegraphics[#4]{#1}
-        \IfValueT{#3} { \caption{#3} }
+%   #3  - place figure RIGTH HERE
+%   #4  - the image's caption
+%   #5  - settings forwards into a \includegraphics function
+\NewDocumentCommand{\addFigure}{ m o s o O{ }} {
+    \bool_if:nTF {#3}
+    { \begin{figure}[H]  }
+    { \begin{figure}[ht] }
+        \centering\includegraphics[#5]{#1}
+        \IfValueT{#4} { \caption{#4} }
         \IfValueT{#2} { \label{\sections@figPrefix#2} }
     \end{figure}
 }
