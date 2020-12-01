@@ -6,7 +6,7 @@ class XLSX2TeXConverter:
         pass
 
     def convert(self, sheet_path:str) -> str:
-        wb = load_workbook(sheet_path)
+        wb = load_workbook(sheet_path, data_only=True)
         ws = wb.active
         mg = ws.merged_cells.ranges
 
@@ -22,7 +22,16 @@ class XLSX2TeXConverter:
             line   = []
             bEmpty = True
             for cell in row[:width]:
-                line.append(str(cell.value))
+                value   = cell.value
+                cformat = cell.number_format
+                if cformat.startswith("0"):
+                    parts   = cformat.split(".")
+                    count   = 0 if len(parts) == 1 else len(parts[1])
+                    pattern = "{:." + str(count) + "f}"
+                    value   = pattern.format(value)
+                else:
+                    value = str(value)
+                line.append(self.sheeld(value))
                 bEmpty &= cell.value == None
             text += '\t'
             text += ' & '.join(line)
@@ -30,3 +39,11 @@ class XLSX2TeXConverter:
             text += '\n'
         text += r'\end{tabu}'
         return text
+
+    def sheeld(self, val:str) -> str:
+        for f, t in {
+            '%': r'\%',
+            '^': r'\^',
+        }.items():
+            val = val.replace(f, t)
+        return val
