@@ -13,17 +13,24 @@
 }{}
 
 % modules
-\input{./modules/code.tex }
-\input{./modules/math.tex }
-\input{./modules/lang/ru.tex}
+\input{./modules/code.tex}
 
 \addModuleCode
 {   % tables
     \usepackage{longtable, ltcaption} % long tables
     \usepackage{multirow,  makecell } % improved table formatting
-    \usepackage{tabu,      tabulary } % automatic table row width. \note: \tabu must be colled before \hyperref
+    \usepackage{tabu,      tabulary } % automatic table row width. \note: \tabu must be called before \hyperref
     \usepackage{threeparttable}       % automatic table caption's width
 }{}
+
+\addModuleCode
+{   % hyperrefs
+    \usepackage[hidelinks]{hyperref}
+}{}
+
+% ater \hyperrefs
+\input{./modules/math.tex}
+\input{./modules/lang/ru.tex}
 
 \addModuleCode
 {   % common typography
@@ -35,11 +42,6 @@
 \addModuleCode
 {   % vector graphics
     \usepackage{tikz}
-}{}
-
-\addModuleCode
-{   % hyperrefs
-    \usepackage[hidelinks]{hyperref}
 }{}
 
 \addModuleCode 
@@ -87,3 +89,4 @@
 \input{./modules/frames.tex}
 \input{./modules/acronyms.tex}
 \input{./modules/enums.tex}
+\input{./modules/accents.tex}

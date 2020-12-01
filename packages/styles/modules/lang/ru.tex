@@ -3,20 +3,26 @@
     \usepackage{fontspec}
     \usepackage{polyglossia}[2014/05/21]
     \usepackage{xecyr}
+    \usepackage{mathtext}
 } {
     % set main and additional languages
     \setmainlanguage[babelshorthands=true,indentfirst=true]{russian}
     \setotherlanguage{english}
 
-    \setmonofont{Courier New}                       % моноширинный шрифт
-    \newfontfamily\cyrillicfonttt{Courier New}      % моноширинный шрифт для кириллицы
-    \defaultfontfeatures{Ligatures=TeX}             % стандартные лигатуры TeX, замены нескольких дефисов на тире и т. п. Настройки моноширинного шрифта должны идти до этой строки, чтобы при врезках кода программ в коде не применялись лигатуры и замены дефисов
-    
-    \setmainfont{Times New Roman}                   % Шрифт с засечками
-    \newfontfamily\cyrillicfont{Times New Roman}    % Шрифт с засечками для кириллицы
-    
+    \setmainfont{CMU Serif}
+    \setsansfont{CMU Sans Serif}
+    \setmonofont{CMU Typewriter Text}  
     \setmathfont{Latin Modern Math}
 
-    \setsansfont{Arial}                             % Шрифт без засечек
-    \newfontfamily\cyrillicfontsf{Arial}            % Шрифт без засечек для кириллицы
+    \DeclareSymbolFont{cyrletters}{\encodingdefault}{\familydefault}{m}{it}
+    \newcommand{\makecyrmathletter}[1]
+    {
+        \begingroup\lccode`a=#1\lowercase{\endgroup
+        \Umathcode`a}="0 \csname symcyrletters\endcsname\space #1
+    }
+    \count255="409
+    \loop\ifnum\count255<"44F
+        \advance\count255 by 1
+        \makecyrmathletter{\count255}
+    \repeat
 }
