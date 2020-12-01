@@ -5,7 +5,7 @@
 %   #3  - table caption
 \NewDocumentCommand{\addTable}{ m o o }
 {{
-    \begin{table}[ht]
+    \begin{table}[H]
         \IfValueT{#3} { \caption{#3} }
         \input{\frmDRootAutogen/\frmRRootDocs/#1.tex}
         \IfValueT{#2} { \label{\sections@tabPrefix#2} }
