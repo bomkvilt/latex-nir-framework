@@ -24,7 +24,7 @@ class XLSX2TeXConverter:
             for cell in row[:width]:
                 value   = cell.value
                 cformat = cell.number_format
-                if cformat.startswith("0"):
+                if cformat.startswith("0") and not isinstance(value, str):
                     parts   = cformat.split(".")
                     count   = 0 if len(parts) == 1 else len(parts[1])
                     pattern = "{:." + str(count) + "f}"
