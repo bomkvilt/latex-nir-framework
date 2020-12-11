@@ -66,15 +66,15 @@
     \usepackage{kvsetkeys} 
 } {
     % support of white spaces in \labelcref https://tex.stackexchange.com/a/340502/104425
-    \let\org@@cref\@cref
-    \renewcommand*{\@cref}[2] 
-    {
-        \edef \process@me 
-        {
-            \noexpand\org@@cref{#1} {\zap@space#2 \@empty}
-        }
-        \process@me
-    }
+    % \let\org@@cref\@cref
+    % \renewcommand*{\@cref}[2] 
+    % {
+    %     \edef \process@me 
+    %     {
+    %         \noexpand\org@@cref{#1} {\zap@space#2 \@empty}
+    %     }
+    %     \process@me
+    % }
 }
 \makeatother
 

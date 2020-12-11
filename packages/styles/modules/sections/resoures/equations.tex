@@ -50,7 +50,7 @@
 
     \bool_if:nTF { #3 || \tl_if_novalue_p:n{#4} }
     { \tl_set:Nx \l@label_tl {#4} }
-    { \tl_set:Nx \l@label_tl {\sections@eqs@partPrefix#4} }
+    { \tl_set:Nx \l@label_tl {\sections@eqsPrefix\sections@eqs@partPrefix#4} }
 
     \input{\frmDRootAutogen/\frmRRootEquations/\l@path_tl.tex}
     % -> \printEquations
@@ -58,7 +58,7 @@
     
     \tl_if_eq:NNTF \l@label_tl \c_novalue_tl
     { \printEquations }
-    { \printEquations[\sections@eqsPrefix\l@label_tl] }
+    { \printEquations[\l@label_tl] }
 
     \printVarExplTable{Где:}
 }}
@@ -70,9 +70,10 @@
 %   #3  - internal label
 \NewDocumentCommand{\req}{ s m o } 
 {{
-    \tl_set:NV \l@prefix_tl \sections@eqsPrefix
+    \tl_set:Nx \l@prefix_tl {}
     \bool_if:nF {#1}
     { 
+        \tl_put_right:NV \l@prefix_tl \sections@eqsPrefix
         \tl_put_right:NV \l@prefix_tl \sections@eqs@partPrefix 
     }
 
