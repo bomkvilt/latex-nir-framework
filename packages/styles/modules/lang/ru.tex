@@ -12,10 +12,15 @@
     \setmainlanguage[babelshorthands=true,indentfirst=true]{russian}
     \setotherlanguage{english}
 
-    \setmainfont{CMU Serif}
-    \setsansfont{CMU Sans Serif}
-    \setmonofont{CMU Typewriter Text}  
-    \setmathfont{Latin Modern Math}
+    \setmainfont {Times New Roman}
+    \setromanfont{Times New Roman} 
+    \setsansfont {Arial} 
+    \setmonofont {Courier New} 
+
+    \newfontfamily{\cyrillicfont}  {Times New Roman} 
+    \newfontfamily{\cyrillicfontrm}{Times New Roman}
+    \newfontfamily{\cyrillicfonttt}{Courier New}
+    \newfontfamily{\cyrillicfontsf}{Arial}
 
     \DeclareSymbolFont{cyrletters}{\encodingdefault}{\familydefault}{m}{it}
     \newcommand{\makecyrmathletter}[1]
