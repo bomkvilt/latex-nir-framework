@@ -201,7 +201,7 @@ class _TeXProcessor:
             'equations': self._equationData,
             'varexpls' : self._varExpls,
             'mode'     : self._getEquationMode(),
-            'bTall'    : reduce(lambda a, b: a['bTall'] or b['bTall'], self._equationData),
+            # 'bTall'    : reduce(lambda a, b: a['bTall'] or b['bTall'], self._equationData),
         }).replace('\r', '').replace('\n\n', '\n')
 
     def _getEquationMode(self):

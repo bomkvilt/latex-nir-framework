@@ -39,8 +39,8 @@
 \NewDocumentCommand{\rfg}{ s m } 
 {   
     \bool_if:nTF {#1}
-    { \secs_addReference:Nn{}{#2} }
-    { \secs_addReference:Nn{\sections@figPrefix}{#2} }
+    { \secs_addReference:Nx{}{#2} }
+    { \secs_addReference:Nx{\sections@figPrefix}{#2} }
 }
 
 % >>
