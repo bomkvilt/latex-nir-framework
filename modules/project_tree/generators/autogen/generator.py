@@ -17,12 +17,8 @@ class AutogenGenerator:
         env    = Environment(loader = loader)
         self._template = env.get_template('autogen.templ.tex')
 
-        # general settings
-        self._outname = 'autogen.tex'
 
-
-    def Generate(self, sectionInfo: FSectionInfo, builddir: str) -> None:
-        outpath = os.path.join(builddir, self._outname)
+    def Generate(self, sectionInfo: FSectionInfo, outpath: str) -> None:
         outdata = self._template.render(vars = self._generateVars(sectionInfo))
         outdata = outdata.replace('<<', '{')
         outdata = outdata.replace('>>', '}')

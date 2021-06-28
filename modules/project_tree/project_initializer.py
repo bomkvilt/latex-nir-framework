@@ -59,8 +59,13 @@ class ProjectInitializer:
         buildRoot = self._getBuildRoot(docInfo)
 
         for sectionInfo in docInfo.sectins.values():
-            builddir = JoinPath([buildRoot, sectionInfo.dpath])
-            self._autogen.Generate(sectionInfo, builddir)
+            outpath = JoinPath([buildRoot, sectionInfo.dpath, 'autogen.tex'])
+
+            print(f'generating autogen file {outpath}... ', end='')
+
+            self._autogen.Generate(sectionInfo, outpath)
+
+            print('done')
         
 
     def _getBuildRoot(self, docInfo: FDocumentInfo) -> str:
