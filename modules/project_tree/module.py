@@ -20,7 +20,8 @@ class ProjectTreeModule(ModuleBase):
 
 
     def Register(self, builder: ArgParserBuilder) -> None:
-        builder.addHandler(self._onModuleCalled)
+        initcmd = builder.addCommand('init')
+        initcmd.addHandler(self._onModuleCalled)
 
 
     def ScanDocument(self, secname: str) -> FDocumentInfo:

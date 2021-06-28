@@ -16,11 +16,15 @@ class ArgParserBuilder:
 
     # addArgument 
     def addArgument(self, arg:str, 
-        help:str        = None,
-        required:bool   = True,
-        default         = None,
+        help:str      = None,
+        required:bool = True,
+        default       = None,
     ):
-        self._parser.add_argument(arg, help=help, required=required, default=default)
+        kwargs = {}
+        if (not required):
+            kwargs['required'] = required
+            kwargs['default' ] = default
+        self._parser.add_argument(arg, help=help, **kwargs)
 
     # addHandler assigns a handler to the underprocessing command
     def addHandler(self, handler):
