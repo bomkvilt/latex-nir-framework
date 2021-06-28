@@ -18,7 +18,7 @@ class MMLTokenExtractor:
     # protected:
 
     def _extractTokens(self, mmltexRoot: str) -> list[str]:
-        tokens = set[str]()
+        tokens = list[str]()
 
         for path in iglob(os.path.join(mmltexRoot, '*.xsl')):
             with open(path) as file:

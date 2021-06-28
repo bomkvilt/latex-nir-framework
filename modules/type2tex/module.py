@@ -35,6 +35,7 @@ class Type2LaTeXModule(ModuleBase):
     def _updateTockens() -> None:
         extractor = MMLTokenExtractor(_mmltexRoot)
         extractor.SaveTokensTo(_tokensPath)
+        print(f'mml tokens were saved to "{_tokensPath}"')
 
 
     def _generateEquationsHandler(self, args) -> None:
