@@ -49,7 +49,7 @@ class T2TConverter:
             if not os.path.isdir(dirname):
                 raise RuntimeError(f'passed path is not a directory {path}')
         else:
-            os.mkdir(dirname)            
+            os.makedirs(dirname)
         # create a destination file
         with open(path, 'w') as file:
             file.write(text)
