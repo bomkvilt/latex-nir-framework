@@ -166,7 +166,8 @@
 	<xsl:apply-templates select="*[2]"/>
 	<xsl:text>}{</xsl:text>
 	<xsl:apply-templates select="*[3]"/>
-	<xsl:text>}\right\rfloor </xsl:text>
+	<!-- label: changed -->
+	<xsl:text>}\right.\rfloor </xsl:text>
 </xsl:template>
 
 <!-- 4.4.3.2 factorial -->

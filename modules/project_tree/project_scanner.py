@@ -57,6 +57,14 @@ class FSectionInfo(FAbstractInfo):
             partInfo.UpdateDPath(documentRoot)
         return super().UpdateDPath(documentRoot)
 
+    def GetAllResources(self, key: str) -> list[str]:
+        if (not key in self.resources):
+            return list[str]()
+        
+        resources = list[str](self.resources[key])
+        for partinfo in self.parts.values():
+            resources += partinfo.GetResources(key)
+        return resources
 
 
 class FDocumentInfo(FAbstractInfo):
@@ -78,6 +86,15 @@ class FDocumentInfo(FAbstractInfo):
         for sectionInfo in self.sectins.values():
             sectionInfo.UpdateDPath(documentRoot)
         super().UpdateDPath(documentRoot)
+
+    def GetAllResources(self, key: str) -> list[str]:
+        if (not key in self.resources):
+            return list[str]()
+        
+        resources = list[str](self.resources[key])
+        for secinfo in self.sectins.values():
+            resources += secinfo.GetAllResources(key)
+        return resources
 
 
 

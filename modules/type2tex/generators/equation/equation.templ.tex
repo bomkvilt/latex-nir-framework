@@ -1,0 +1,52 @@
+% DON'T EDIT - this file was generated automaticaly by a 'type2tex/generators/equation' tool.
+% This file contains function represents a source MathType equation
+
+
+%% print equations body
+% #1 - equation label
+% #2 - subequation label
+\DeclareDocumentCommand{\printEquations}{ o o{} }
+{{
+    {%- set eqs = vars['equations'] %}
+    
+    {%- for eq in eqs %}
+    % if ((#2 && #2 == '{{!eq.label!}}') || !#2)
+    \def\flag{true}
+    \IfValueT{#2}
+    {
+        \ifthenelse{#2={{!eq.label!}}} {} 
+        {   % false
+            \def\flag{false}
+        }
+    }
+    \ifthenelse{\flag} {} 
+    {   % false
+        \begin{equation}
+            {%- if (eqs|length) > 1 and eq.label != '' %}
+            \IfValueT{#1} { \label{#1--{{!eq.label!}} } }
+            {%- else %}
+            \IfValueT{#1} { \label{#1} }
+            {%- endif %}
+            
+            {{!eq.data!}}
+        \end{equation}
+    }
+    {% endfor %}
+}}
+
+%% print variable explanation table
+% #1 - key: "where"
+\DeclareDocumentCommand{\printVarExplTable}{ m }
+{{
+    {%- set varexpls = vars['varexpls'] %}
+
+    {%- if (varexpls|length) > 0 %}
+    \begin{longtabu} to \textwidth {llX}
+        {%- set varexpl = varexpls[0] %}
+        #1 & ${{!varexpl.key!}}$ & --- {{!varexpl.val!}} \\
+        {%- for varexpl in varexpls[1:] %}
+        ~  & ${{!varexpl.key!}}$ & --- {{!varexpl.val!}} \\
+        {%- endfor %}
+    \end{longtabu}
+    {%- endif %}
+}}

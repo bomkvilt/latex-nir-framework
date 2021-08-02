@@ -16,3 +16,8 @@ class FTexworksConfig:
             'equations': 'eqns',
             'documents': 'docs',
         }
+
+    def GetResourceDir(self, type: str) -> str:
+        if (type in self.resourceTypes):
+            return self.resourceTypes[type]
+        raise RuntimeError(f'passed resource type {type} is unknown')

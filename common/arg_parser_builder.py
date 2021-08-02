@@ -24,7 +24,19 @@ class ArgParserBuilder:
         if (not required):
             kwargs['required'] = required
             kwargs['default' ] = default
-        self._parser.add_argument(arg, help=help, **kwargs)
+        self._parser.add_argument(arg, help = help, **kwargs)
+    
+    def addFlag(self, arg: str, onAction: bool = True, 
+        help: str = None, 
+    ):
+        kwargs = {}
+        if (onAction == True): 
+            kwargs['action']  = "store_true"
+            kwargs['default'] = False
+        else:
+            kwargs['action']  = "store_false"
+            kwargs['default'] = True
+        self._parser.add_argument(arg, help = help, **kwargs)
 
     # addHandler assigns a handler to the underprocessing command
     def addHandler(self, handler):

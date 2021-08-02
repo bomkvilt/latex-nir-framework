@@ -133,6 +133,7 @@
 		</xsl:when>
 		<xsl:when test="@close">
 			<xsl:if test="translate(@open,'{}[]()|','{{{{{{{')='{'">
+				<!-- label: changed -->
 				<xsl:text>\right</xsl:text>
 			</xsl:if>
 			<xsl:if test="@open='{' or @open='}'">
