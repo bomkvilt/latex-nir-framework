@@ -5,7 +5,6 @@ from .utils.mml_token_extractor import MMLTokenExtractor
 from .settings import mmltexRoot, tokensPath
 from .t2t_converter import T2TConverter
 
-import os
 import glob
 
 
