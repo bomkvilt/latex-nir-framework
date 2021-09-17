@@ -1,0 +1,41 @@
+% import \moduleCode command
+\input{./modules/modules.tex}
+
+% import common packages
+\moduleCode
+{
+	\usepackage{comment  } % 
+	\usepackage{etoolbox } % usefull tools
+	\usepackage{pdflscape} % album layout
+	\usepackage{geometry } % fields
+	\usepackage{atbegshi } % output routine callbacks
+	\usepackage{float    }
+	\usepackage{placeins }
+	\usepackage{xspace   }
+}{}
+
+% import table packages
+\moduleCode
+{
+	\usepackage{longtable	, ltcaption} % long tables
+    \usepackage{multirow	, makecell } % improved table formatting
+    \usepackage{tabu		, tabulary } % automatic table row width \note: \tabu must be called before @hyperref
+    \usepackage{threeparttable         } % automatic table caption's width
+}{}
+
+% hyperreferences
+% \note after @taby
+\moduleCode
+{
+    \usepackage[hidelinks]{hyperref}
+}{}
+
+\input{./modules/math.tex}
+\input{./modules/langs/ru.tex}
+
+\moduleCode
+{   % common typography
+    \usepackage{soulutf8} % multiline underlines and strikethroughs
+    \usepackage{icomma}   % support of comma in equations' digits
+    \usepackage[hyphenation, lastparline]{impnattypo}
+}{}
