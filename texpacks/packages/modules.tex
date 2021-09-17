@@ -1,0 +1,22 @@
+\makeatletter
+
+\newcommand{\@@postdump}{}
+
+%% Add code that must be colled in @predump and @postdump stages
+%   #1 - predump code
+%   #2 - postdump code
+\newcommand{\moduleCode}[2]
+{
+    #1 % predump stage
+    \g@addto@macro\@@postdump{#2}
+}
+
+%%% execute regular code
+\newcommand{\afterdump}
+{
+    \typeout{Info: executing postdump callbacks...}
+    \@@postdump
+    \typeout{Info: executing postdump callbacks... done}
+}
+
+\makeatother

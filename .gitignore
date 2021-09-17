@@ -1,12 +1,7 @@
-# tmp
-/_old_/
+# >> python compile dirs
+__pycache__/
 
-# build directory
-/example/build/*
-!example/build/out/
-!example/build/framework.bat
-
-# latex
+# >> latex compile files
 *.synctex(*)
 *.lgpl
 *.aux

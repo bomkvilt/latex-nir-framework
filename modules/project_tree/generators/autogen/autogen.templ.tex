@@ -1,0 +1,10 @@
+% DON'T EDIT - this file was generated automaticaly by a 'project_tree/generators/autogen' tool.
+% This file contains sectoin-wide constants
+
+
+{% for var in vars -%}
+
+% \brief {{ var['exp'] }}
+\def\{{ var['var'] }}<<{{ var['val'] }}>>
+
+{% endfor %}

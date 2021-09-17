@@ -1,0 +1,68 @@
+\texcode{on}
+\moduleCode
+{
+    % Математические дополнения от AMS
+    \usepackage{amsthm, amsmath, amscd, amsfonts, amssymb}
+    % Добавляет окружение multlined
+    \usepackage{mathtools}
+    % Красивые дроби
+    \usepackage{xfrac}
+    % unicode letter in math mode
+    \usepackage{unicode-math}
+    % vector sign above letters
+    \usepackage{esvect}
+    % 
+    \usepackage{accents}
+    % 
+    \usepackage[
+        locale               = DE,
+        list-separator       = {;\,},
+        list-final-separator = {;\,},
+        list-pair-separator  = {;\,},
+        list-units           = single,
+        range-units          = single,
+        range-phrase         = {\text{\ensuremath{-}}},
+        quotient-mode        = fraction,
+        fraction-function    = \sfrac,
+        separate-uncertainty,
+    ]{siunitx}
+    % provides \BODY
+    \usepackage{environ }
+    % provides \ifdimcomp
+    \usepackage{etoolbox}
+    % provides \resizebox
+    \usepackage{graphicx}
+    %  
+    \usepackage{mathtext}
+
+    % >> add math-mode chortcuts <<
+
+    \def\cc#1{\accentset{\circ}{#1}}
+}
+{
+    % 
+    \sisetup{inter-unit-product = \ensuremath{{}\cdot{}}}
+
+    % >> feet equation to page: https://stackoverflow.com/a/55750239 <<
+    \newlength{\math@eqlen }
+    \newlength{\math@offset} \setlength{\math@offset}{15mm}
+
+    \let\math@old@equation@bgn=\equation
+    \let\math@old@equation@end=\endequation
+
+    \RenewEnviron{equation}
+    {
+        \settowidth{\math@eqlen}{$\BODY$}
+        
+        \math@old@equation@bgn
+        \ifdimcomp{\linewidth - \math@offset}{>}{\math@eqlen}
+        { 
+            \ensuremath{\BODY} 
+        }
+        { 
+            \resizebox{\linewidth - \math@offset}{!}{\ensuremath{\BODY}}
+        }
+        \math@old@equation@end
+    }
+}
+\texcode{}
