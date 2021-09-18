@@ -55,4 +55,5 @@ class BuildScriptsModule(ModuleBase):
         )
 
     def _onClear(self, args) -> None:
+        # \todo write a clear script
         pass
