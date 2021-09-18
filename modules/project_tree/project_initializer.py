@@ -1,6 +1,6 @@
 from __future__ import annotations
-from ..includes import FTexworksConfig, JoinPath
-from .project_scanner import FDocumentInfo
+from ..includes import FTexworksConfig, PathWorks
+from .classes.document_strcuture import FRootNode
 from .generators.autogen.generator import AutogenGenerator
 
 import os
@@ -13,60 +13,41 @@ class ProjectInitializer:
         self._conf    = conf
         self._autogen = AutogenGenerator()
 
-
-    def InitProject(self, docInfo: FDocumentInfo) -> None:
-        self._initBuildDirectories(docInfo)
-
+    def InitProject(self, root: FRootNode) -> None:
+        self._initBuildDirectories(root)
 
     # protected:
 
-    # _initBuildDirectories creates all required project files:
-    #   - mirror section roots to a build directory
-    #   - create section autogen files
-    def _initBuildDirectories(self, docInfo: FDocumentInfo) -> None:
+    def _initBuildDirectories(self, root: FRootNode) -> None:
         # >> to prevent a number of LaTeX error 
         # section build directory must be created 
         # by-hands before LaTeX compile start
-        self._mirrorSectionRoots(docInfo)
-
+        self._createSectionBuildRoot(root)
         # >> create autogen files.
         # This method creates files with basic variables.
         # Diffrent modules can update the file with use of special instruments
-        self._generateAutogens(docInfo)
+        self._generateAutogens(root)
 
-
-    def _mirrorSectionRoots(self, docInfo: FDocumentInfo) -> None:
-        buildRoot = self._getBuildRoot(docInfo)
-
-        for sectionInfo in docInfo.sectins.values():
-            builddir = JoinPath([buildRoot, sectionInfo.dpath])
-
+    def _createSectionBuildRoot(self, root: FRootNode) -> None:
+        buildRoot = self._conf.GetBuildRoot()
+        for secnode in root.children.values():
+            builddir = PathWorks.JoinPath(buildRoot, secnode.rpath)
             # check if build directory already exists
-            if (os.path.exists(builddir)):
-                if (os.path.isdir(builddir)):
-                    continue
-                raise RuntimeError(f'build path {builddir} must be a directory')
-            
+            self._checkBuildDir(builddir)
             # create the directory
             print(f'creating a section build directory... "{builddir}"... ', end = '')
-
-            os.makedirs(builddir)
-            
+            os.makedirs(builddir, exist_ok = True)
             print('done')
     
-
-    def _generateAutogens(self, docInfo: FDocumentInfo) -> None:
-        buildRoot = self._getBuildRoot(docInfo)
-
-        for sectionInfo in docInfo.sectins.values():
-            outpath = JoinPath([buildRoot, sectionInfo.dpath, 'autogen.tex'])
-
-            print(f'generating autogen file {outpath}... ', end='')
-
-            self._autogen.Generate(sectionInfo, outpath)
-
+    def _generateAutogens(self, root: FRootNode) -> None:
+        buildRoot = self._conf.GetBuildRoot()
+        for secnode in root.children.values():
+            outpath = PathWorks.JoinPath(buildRoot, secnode.rpath, 'autogen.tex')
+            # render template
+            print(f'generating an autogen file {outpath}... ', end='')
+            self._autogen.Generate(secnode, outpath)
             print('done')
-        
 
-    def _getBuildRoot(self, docInfo: FDocumentInfo) -> str:
-        return JoinPath([docInfo.path, self._conf.build_dir])
+    def _checkBuildDir(self, builddir: str) -> None:
+        if (os.path.exists(builddir) and not os.path.isdir(builddir)):
+            raise RuntimeError(f'build path {builddir} must be a directory')

@@ -1,4 +1,4 @@
-from ..includes import FTexworksConfig, JoinPath
+from ..includes import FTexworksConfig, PathWorks
 from .t2t_converter_backend import T2TBackend
 from .t2t_converter_frontend import T2TFrontend
 from .settings import mmltexRoot, tokensPath
@@ -34,13 +34,13 @@ class T2TConverter:
         projroot  = self._conf.project_root
         docsdir   = self._conf.document_dir
         builddir  = self._conf.build_dir
-        docsroot  = JoinPath([projroot, docsdir])
-        buildroot = JoinPath([projroot, docsdir, builddir])
+        docsroot  = PathWorks.JoinPath(projroot, docsdir)
+        buildroot = PathWorks.JoinPath(projroot, docsdir, builddir)
         
         relpath  = os.path.relpath(epspath, docsroot)
         filename = os.path.splitext(os.path.basename(relpath))[0] + '.tex'
         fileroot = os.path.dirname(relpath)
-        return JoinPath([buildroot, fileroot, filename])
+        return PathWorks.JoinPath(buildroot, fileroot, filename)
 
     def _saveLaTeXEquation(self, path: str, text: str) -> None:
         # create a base directory

@@ -1,5 +1,6 @@
 from __future__ import annotations
 import argparse
+from typing import Any
 
 
 class ArgParserBuilder:
@@ -18,13 +19,14 @@ class ArgParserBuilder:
     def addArgument(self, arg:str, 
         help:str      = None,
         required:bool = True,
-        default       = None,
+        default:Any   = None,
+        choices:list[str] = None,
     ):
         kwargs = {}
         if (not required):
             kwargs['required'] = required
             kwargs['default' ] = default
-        self._parser.add_argument(arg, help = help, **kwargs)
+        self._parser.add_argument(arg, help=help, choices=choices, **kwargs)
     
     def addFlag(self, arg: str, onAction: bool = True, 
         help: str = None, 

@@ -1,5 +1,5 @@
 % import \moduleCode command
-\input{./modules/modules.tex}
+\input{./packages/modules.tex}
 
 % import common packages
 \moduleCode
@@ -30,12 +30,13 @@
     \usepackage[hidelinks]{hyperref}
 }{}
 
-\input{./modules/math.tex}
-\input{./modules/langs/ru.tex}
+\input{./packages/texcode.tex}
+\input{./packages/math.tex}
+\input{./packages/langs/ru.tex}
 
 \moduleCode
 {   % common typography
     \usepackage{soulutf8} % multiline underlines and strikethroughs
-    \usepackage{icomma}   % support of comma in equations' digits
+    \usepackage{icomma }  % support of comma in equations' digits
     \usepackage[hyphenation, lastparline]{impnattypo}
 }{}

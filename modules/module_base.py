@@ -1,6 +1,6 @@
 from __future__ import annotations
-from .common.arg_parser_builder import ArgParserBuilder
-from .texworks_config import FTexworksConfig
+from ..common.arg_parser_builder import ArgParserBuilder
+from ..texworks_config import FTexworksConfig
 
 # >> forward declarations
 from typing import TYPE_CHECKING

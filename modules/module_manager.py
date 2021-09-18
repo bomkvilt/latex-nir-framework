@@ -1,7 +1,7 @@
 from typing import Type
-from .common.arg_parser_builder import ArgParserBuilder
+from ..common.arg_parser_builder import ArgParserBuilder
+from ..texworks_config import FTexworksConfig
 from .module_base import ModuleBase
-from .texworks_config import FTexworksConfig
 
 
 
