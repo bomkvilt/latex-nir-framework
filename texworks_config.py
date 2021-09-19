@@ -23,11 +23,11 @@ class FTexworksConfig:
         self.latexCompiler = 'xelatex'
         self.latexArgs = [
             '-synctex=1',
-            '-recorder',
+            '-halt-on-error',
             '-interaction=nonstopmode',
         ]
         self.latexRenderArgs = [
-            '-output-driver=\'xdvipdfmx -z3\'',
+            '-output-driver=xdvipdfmx -z1',
         ]
         self.latexAUXdir = '.'
         self.latexOutdir = '.'

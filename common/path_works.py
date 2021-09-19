@@ -3,7 +3,9 @@ import os
 class PathWorks:
     @staticmethod
     def FixPath(path: str) -> str:
-        return path.replace('\\', '/')
+        path = os.path.normpath(path)
+        path = path.replace('\\', '/')
+        return path
 
     @staticmethod
     def JoinPath(*parts: str) -> str:
