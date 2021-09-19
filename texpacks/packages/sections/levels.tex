@@ -1,0 +1,106 @@
+\texcode{on}
+
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{tocloft}
+
+% --------------------------------------------------------------------------------------------------
+% >> create section level styles
+% --------------------------------------------------------------------------------------------------
+
+% create section classes
+\titleclass{\sectionA}{straight}[\section ] % 1
+\titleclass{\sectionB}{straight}[\sectionA] % 2
+\titleclass{\sectionC}{straight}[\sectionB] % 3
+\titleclass{\sectionD}{straight}[\sectionC] % 4
+\titleclass{\sectionE}{straight}[\sectionD] % 5
+\titleclass{\sectionF}{straight}[\sectionE] % 6
+
+% create section counters: { counter[lvl] }[ counter[lvl - 1] ]
+\newcounter{sectionA}           % 1
+\newcounter{sectionB}[sectionA] % 2
+\newcounter{sectionC}[sectionB] % 3
+\newcounter{sectionD}[sectionC] % 4
+\newcounter{sectionE}[sectionD] % 5
+\newcounter{sectionF}[sectionE] % 6
+
+% create section labels: label[level] = label[lvl - 1] + '.' + counter[lvl]
+\renewcommand\thesectionA{             \arabic{sectionA}} % 1
+\renewcommand\thesectionB{\thesectionA.\arabic{sectionB}} % 2
+\renewcommand\thesectionC{\thesectionB.\arabic{sectionC}} % 3
+\renewcommand\thesectionD{\thesectionC.\arabic{sectionD}} % 4
+\renewcommand\thesectionE{\thesectionD.\arabic{sectionE}} % 5
+\renewcommand\thesectionF{\thesectionE.\arabic{sectionF}} % 6
+% fix paragraphs' levels
+\renewcommand\paragraph   {\@startsection{paragraph}   {7}{\z@}       {3.25ex \@plus1ex \@minus .2ex}{-1em}{\normalfont\normalsize\bfseries}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{8}{\parindent}{3.25ex \@plus1ex \@minus .2ex}{-1em}{\normalfont\normalsize\bfseries}}
+
+% set section title formats and spacing
+\titleformat  {\sectionA}{\normalfont\LARGE     \bfseries}{\thesectionA}{1em}{} % 1
+\titleformat  {\sectionB}{\normalfont\Large     \bfseries}{\thesectionB}{1em}{} % 2
+\titleformat  {\sectionC}{\normalfont\large     \bfseries}{\thesectionC}{1em}{} % 3
+\titleformat  {\sectionD}{\normalfont\normalsize\bfseries}{\thesectionD}{1em}{} % 4
+\titleformat  {\sectionE}{\normalfont\normalsize\bfseries}{\thesectionE}{1em}{} % 5
+\titleformat  {\sectionF}{\normalfont\normalsize\bfseries}{\thesectionF}{1em}{} % 6
+\titlespacing*{\sectionA}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex} % 1
+\titlespacing*{\sectionB}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex} % 2
+\titlespacing*{\sectionC}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex} % 3
+\titlespacing*{\sectionD}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex} % 4
+\titlespacing*{\sectionE}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex} % 5
+\titlespacing*{\sectionF}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex} % 6
+
+% set token levels
+\def\toclevel@sectionA{1}
+\def\toclevel@sectionB{2}
+\def\toclevel@sectionC{3}
+\def\toclevel@sectionD{4}
+\def\toclevel@sectionE{5}
+\def\toclevel@sectionF{6}
+\def\toclevel@paragraph{7}
+\def\toclevel@subparagraph{8}
+
+% set section numbering settings
+\setcounter{secnumdepth}{6} % number of numbered levels
+\setcounter{tocdepth}   {3} % number of levels in a table of contents
+
+% table of contents: indenton settings
+% |    1.1 text
+% |    |<->|    is a #3
+% |<-->|        is a #2
+% #1 - level specificator
+% #2 - row left indent
+% #3 - raw-relative text indent
+\def\l@sectionA    {\@dottedtocline{1}{0em}{2em}}
+\def\l@sectionB    {\@dottedtocline{2}{0em}{2em}}
+\def\l@sectionC    {\@dottedtocline{3}{0em}{3em}}
+\def\l@sectionD    {\@dottedtocline{4}{0em}{4em}}
+\def\l@sectionE    {\@dottedtocline{5}{0em}{5em}}
+\def\l@sectionF    {\@dottedtocline{6}{0em}{6em}}
+\def\l@paragraph   {\@dottedtocline{7}{0em}{7em}}
+\def\l@subparagraph{\@dottedtocline{8}{0em}{7em}}
+
+
+% --------------------------------------------------------------------------------------------------
+% >> create a generic section command
+% --------------------------------------------------------------------------------------------------
+
+% add a level specification field
+% #1 - temporary inavaliable
+% #2 - section level. By default = 1
+% #3 - temporary inavaliable
+% #4 - section name
+\NewDocumentCommand{\newsection}{s R<>{1} o m}
+{
+    \begin{switch}{#2}
+        \case{1}{\sectionA{#4}}
+        \case{2}{\sectionB{#4}}
+        \case{3}{\sectionC{#4}}
+        \case{4}{\sectionD{#4}}
+        \case{5}{\sectionE{#4}}
+        \case{6}{\sectionF{#4}}
+
+        % \todo raise an exception
+    \end{switch}
+}
+
+\texcode{}

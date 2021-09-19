@@ -1,0 +1,19 @@
+\moduleCode
+{
+    % Switch implementation
+    % https://tex.stackexchange.com/a/187710
+    \usepackage{xifthen}
+
+    \newcommand{\ifequals}[3]
+    {
+        \ifthenelse{\equal{#1}{#2}}{#3}{}
+    }
+    
+    % Dummy, so \renewcommand has something to overwrite...
+    \newcommand{\case}[2]{#1 #2}
+    
+    \newenvironment{switch}[1]
+    {
+        \renewcommand{\case}{\ifequals{#1}}
+    }{}
+}{}
