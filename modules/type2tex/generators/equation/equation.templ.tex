@@ -5,7 +5,7 @@
 %% print equations body
 % #1 - equation label
 % #2 - subequation label
-\DeclareDocumentCommand{\printEquations}{ o o{} }
+\DeclareDocumentCommand{\printEquations}{ o o }
 {{
     {%- set eqs = vars['equations'] %}
     
@@ -50,3 +50,4 @@
     \end{longtabu}
     {%- endif %}
 }}
+

@@ -86,7 +86,7 @@ class FSectionNode(FAbstractDocumentNode):
     def GetAllResources(self, key: str) -> list[str]:
         reslist = self.GetResources(key)
         for child in self.children.values():
-            reslist += child.GetResources()
+            reslist += child.GetResources(key)
         return reslist
 
     def ScanChildren(self, subname: str, typemap: dict[str, str], conf: FTexworksConfig,
@@ -108,10 +108,13 @@ class FRootNode(FAbstractDocumentNode):
             self.children[name] = FSectionNode()
         return self.children[name]
 
-    def GetAllResources(self, key: str) -> list[str]:
+    def GetAllResources(self, key: str, bGlobal: bool = False) -> list[str]:
         reslist = self.GetResources(key)
         for child in self.children.values():
-            reslist += child.GetResources()
+            reslist += child.GetAllResources(key)
+        if (bGlobal):
+            prefix  = os.path.relpath(self.apath, self.rpath)
+            reslist = [PathWorks.JoinPath(prefix, path) for path in reslist]
         return reslist
 
     def ScanChildren(self, subname: str, typemap: dict[str, str], conf: FTexworksConfig,

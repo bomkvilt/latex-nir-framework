@@ -47,10 +47,10 @@ class Type2LaTeXModule(ModuleBase):
         # get equation directories paths
         projectTree:ProjectTreeModule
         projectTree = self._moduleManager.GetModule(ProjectTreeModule)
-        docinfo = projectTree.ScanDocument(secname)
-        resdirs = docinfo.GetAllResources('equations')
+        rootNode = projectTree.ScanDocument(secname)
 
         # scan found directories and and convert found equations
-        for resdir in resdirs:
+        for resdir in rootNode.GetAllResources('equations', bGlobal = True):
+            print(resdir)
             for epspath in glob.iglob(f'{resdir}/*.eps'):
                 self._converter.Convert(epspath, bForce)
