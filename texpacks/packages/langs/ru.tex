@@ -1,20 +1,17 @@
 \moduleCode
 {
-    \usepackage{mathtext   }
+    \usepackage{mathtext}
     \usepackage{indentfirst}
-    \usepackage{misccorr   }
+    \usepackage{misccorr}
+    \usepackage[utf8]{inputenc}
+    \usepackage[T1]{fontenc}
+    \usepackage[latin, english, russian]{babel}
+
 }
 {
-    % include packages cannot be dumped
-    \usepackage{fontspec   }
-    \usepackage{polyglossia}
+    \usepackage{xltxtra}
 
-    % >> ??
-    \setmainlanguage[
-        babelshorthands = true,
-        indentfirst     = true
-    ]{russian}
-    \setotherlanguage{english}
+    \selectlanguage{russian}
 
     % >> ??
     \setmainfont {Times New Roman}
@@ -22,7 +19,7 @@
     \setmonofont {Courier New} 
     \setsansfont {Arial}
 
-    \newfontfamily{\cyrillicfont}  {Times New Roman} 
+    \newfontfamily{\cyrillicfont  }{Times New Roman} 
     \newfontfamily{\cyrillicfontrm}{Times New Roman}
     \newfontfamily{\cyrillicfonttt}{Courier New}
     \newfontfamily{\cyrillicfontsf}{Arial}

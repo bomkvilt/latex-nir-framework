@@ -38,8 +38,17 @@
 {   % common typography
     \usepackage{soulutf8} % multiline underlines and strikethroughs
     \usepackage{icomma  } % support of comma in equations' digits
-    \usepackage[hyphenation, lastparline]{impnattypo}
-}{}
+    \usepackage{hyphenat} % hyphenation support
+}
+{
+	\hyphenchar\font=8208\relax
+}
 
+% import extending code features
 \input{./packages/code/switch.tex}
+
+% document behavior features
 \input{./packages/sections/sections.tex}
+
+% document style features
+\input{./packages/styles/enums.tex}
