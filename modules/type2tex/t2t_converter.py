@@ -51,7 +51,7 @@ class T2TConverter:
         else:
             os.makedirs(dirname)
         # create a destination file
-        with open(path, 'w') as file:
+        with open(path, 'w', encoding='utf8') as file:
             file.write(text)
 
     def _isUpToDate(self, srcpath: str, destpath: str, bForce: bool) -> bool:
