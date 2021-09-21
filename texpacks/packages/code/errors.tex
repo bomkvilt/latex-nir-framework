@@ -1,0 +1,18 @@
+\texcode{on}
+
+% rais an error
+%  #1   - module prefix
+%  #2   - error's text
+\str_new:N \@@errorText
+\NewDocumentCommand{\@@raise}{ o m }
+{{
+    \str_clear:N \@@errorText
+    \tl_if_novalue:nT {#1}
+    {
+        \str_set:Nx \@@errorText {~==~#1: }
+    }
+    \str_set:Nx \@@errorText {\@@errorText #2}
+    \GenericError{\str_use:N \@@errorText}
+}}
+
+\texcode{}

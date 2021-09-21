@@ -17,14 +17,12 @@
 % import table packages
 \moduleCode
 {
-	\usepackage{longtable	, ltcaption} % long tables
-    \usepackage{multirow	, makecell } % improved table formatting
-    \usepackage{tabu		, tabulary } % automatic table row width \note: \tabu must be called before @hyperref
-    \usepackage{threeparttable         } % automatic table caption's width
+	\usepackage{ltablex , booktabs} % long tables
+    \usepackage{multirow, makecell} % improved table formatting
+    \usepackage{threeparttable    } % automatic table caption's width
 }{}
 
 % hyperreferences
-% \note after @taby
 \moduleCode
 {
     \usepackage[hidelinks]{hyperref}
@@ -44,7 +42,15 @@
 	\hyphenchar\font=8208\relax
 }
 
+\moduleCode
+{   % counters
+    \usepackage[figure, table]{totalcount}
+    \usepackage{totcount}
+    \usepackage{totpages}
+}{}
+
 % import extending code features
+\input{./packages/code/errors.tex}
 \input{./packages/code/switch.tex}
 
 % document behavior features

@@ -28,8 +28,9 @@ class EquationsGenerator:
             r'{': r'\\{',
             r'}': r'\\}',
         }
-        unescB = {
-            r'\{\#': r'\{#'
+        unescB = { 
+            # to : from - the fromat is taken to simplify unescape-patterns generation code
+            r'{#' : r'\{\\#'
         }
         # template cleanup patterns
         self._cleanupPatterns  = [(re.compile(x), y) for x, y in (escpB2E | escpB | escpE2B).items()]
