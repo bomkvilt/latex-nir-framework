@@ -56,7 +56,10 @@ class _texProcessor:
     def _normalizeEquation(self, equation: str) -> str:
         for seq in ['\u200b', '$' , '\r']:
             equation = equation.replace(seq, '')
-        for key, val in {r'\frac': r'\dfrac'}.items():
+        for key, val in {
+            r'\frac': r'\dfrac', # don't reduce font size for fractoin's memebers
+            '\u00A0': ' ', # replace non-breaking space with a common space
+        }.items():
             equation = equation.replace(key, val)
         return equation
 

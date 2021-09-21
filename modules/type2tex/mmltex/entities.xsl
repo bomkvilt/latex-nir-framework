@@ -299,12 +299,12 @@
 	<xsl:choose>
 	<xsl:when test="contains($content,'&#x02009;&#x0200A;&#x0200A;')">	<!-- ThickSpace - space of width 5/18 em -->
 		<xsl:call-template name="replaceMtextEntities">
-			<xsl:with-param name="content" select="concat(substring-before($content,'&#x02009;&#x0200A;&#x0200A;'),'\hspace{0.28em}',substring-after($content,'&#x02009;&#x0200A;&#x0200A;'))"/>
+			<xsl:with-param name="content" select="concat(substring-before($content,'&#x02009;&#x0200A;&#x0200A;'),' ',substring-after($content,'&#x02009;&#x0200A;&#x0200A;'))"/> <!-- modified -->
 		</xsl:call-template>
 	</xsl:when>
 	<xsl:when test="contains($content,'&#x02009;')">	<!-- ThinSpace - space of width 3/18 em -->
 		<xsl:call-template name="replaceMtextEntities">
-			<xsl:with-param name="content" select="concat(substring-before($content,'&#x02009;'),'\hspace{0.17em}',substring-after($content,'&#x02009;'))"/>
+			<xsl:with-param name="content" select="concat(substring-before($content,'&#x02009;'),' ',substring-after($content,'&#x02009;'))"/> <!-- modified -->
 		</xsl:call-template>
 	</xsl:when>
 	<xsl:otherwise>
