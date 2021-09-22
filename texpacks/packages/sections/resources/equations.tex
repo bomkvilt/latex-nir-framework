@@ -9,6 +9,7 @@
 % \note must be a global object
 \prop_new:N \@@sections@eqs@paths
 \prop_new:N \@@sections@eqs@labels
+\prop_new:N \@@sections@eqns@labelDB
 
 
 % keys to parse \@@sections@eqns@frame 's arguments
@@ -63,7 +64,7 @@
 %  #1:tl    - output variavle
 %  #2       - souce name
 %  #3       - the source's level
-\cs_new:Npn \@@sections@eqns@load:Nnn #1 #2 #3
+\cs_new_protected:Npn \@@sections@eqns@load:Nnn #1 #2 #3
 {
     \prop_get:cnNF {@@sections@eqs@#2} {#3} #1
     {
@@ -77,7 +78,7 @@
 %  #2       - level's letter
 %  #3       - b use global label names
 %  #4       - equatoin's label
-\cs_new:Npn \@@sections@eqns@makeLabel:Nnnn #1 #2 #3 #4
+\cs_new_protected:Npn \@@sections@eqns@makeLabel:Nnnn #1 #2 #3 #4
 {
     \tl_if_novalue:nTF {#4}
     {
@@ -95,6 +96,37 @@
 }
 
 
+% add part to specified 
+\cs_new_protected:Npn \@@sections@eqns@addSublabel:nn #1 #2
+{{
+    \tl_clear_new:N \@@@parts
+    \prop_get:NnNTF \@@sections@eqns@labelDB {#1} \@@@parts
+    { \tl_set:Nx \@@@parts {\@@@parts,#2} }
+    { \tl_set:Nx \@@@parts {#2} }
+
+    \prop_gput:Nnx \@@sections@eqns@labelDB {#1} {\@@@parts}
+}}
+
+
+% input specified equations
+% n #1  - equation's path
+% n #2  - equation's label
+% n #3  - equation's part to pick up
+% n #4  - ignore varexpl section
+\cs_new_protected:Npn \@@sections@eqns@input:nnnn #1 #2 #3 #4
+{{
+    \input{#1}
+
+    \printEquations[#2][#3]
+
+    \bool_if:nF {#4}
+    {
+        \printVarExplTable{Где}
+    }
+}}
+\cs_generate_variant:Nn \@@sections@eqns@input:nnnn {xxnn, VVnn}
+
+
 % >> -----------------------------------------------------------------------------------------------
 % >> document interface
 % >> -----------------------------------------------------------------------------------------------
@@ -106,7 +138,7 @@
 %       s - section's resources
 %       g - global resources
 % m #2  - equation path
-% s #3  - use global label names
+% s #3  - b use global label names
 % o #4  - equation label
 % d #5  - equation's part to pick up
 % s #6  - ignore varexpl section
@@ -122,22 +154,27 @@
     \@@sections@eqns@input:VVnn \@@@path \@@@label {#5}{#6} 
 }}
 
-% n #1  - equation's path
-% n #2  - equation's label
-% n #3  - equation's part to pick up
-% n #4  - ignore varexpl section
-\cs_new:Npn \@@sections@eqns@input:nnnn #1 #2 #3 #4
+
+\NewDocumentCommand{\registerEquationPart}{ m m }
 {{
-    \input{#1}
-
-    \printEquations[#2][#3]
-
-    \bool_if:nF {#4}
-    {
-        \printVarExplTable{Где}
-    }
+    \@@sections@eqns@addSublabel:nn{#1}{#2}
 }}
-\cs_generate_variant:Nn \@@sections@eqns@input:nnnn {xxnn, VVnn}
+
+
+% reference equation
+% r #1  - flag that represents a search directory 
+%       p - part's    resources
+%       s - section's resources
+%       g - global resources
+% s #2  - b use global label names
+% m #3  - equation label
+% d #4  - equation's parts: csv
+\NewDocumentCommand{\refEq}{ r<> s m d<>}
+{{
+    \tl_clear_new:N \@@@label
+    \@@sections@eqns@makeLabel:Nnnn \@@@label {#1}{#2}{#3}
+    \@@sections@cmn@ref:NVn \@@sections@eqns@labelDB \@@@label {#4}
+}}
 
 
 \texcode{}

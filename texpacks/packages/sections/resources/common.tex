@@ -1,0 +1,60 @@
+\texcode{on}
+
+
+% reference specfied entities
+%   #1  - reference table || -No Value-
+%   #2  - full label
+%   #3  - sublabels:csv || -No Value-
+\cs_new_protected:Npn \@@sections@cmn@ref:Nnn #1 #2 #3
+{{
+    % #3 -> ref{#2--v: v \in #3}
+    % #1 -> ref{#2--v: v \in labels{#2}}
+    % else -> ref{#2}
+    \bool_if:nTF {! \tl_if_novalue_p:n {#3}}
+    { \@@sections@cmn@ref@list:nn{#2}{#3} }
+    { 
+        \bool_if:nTF {! \tl_if_novalue_p:n {#1}}
+        { \@@sections@cmn@ref@all:Nn{#1}{#2} }
+        { \@@sections@cmn@ref@raw:n {#2} }
+    }
+}}
+\cs_generate_variant:Nn \@@sections@cmn@ref:Nnn {NVn}
+
+
+% reference specified sublabels
+%   #1  - full lable
+%   #2  - sublabels:csv
+\cs_new_protected:Npn \@@sections@cmn@ref@list:nn #1 #2
+{{
+    \seq_clear_new:N \@@@labels
+    \clist_map_inline:nn { #2 }
+    {
+        \seq_push:Nn \@@@labels {#1--##1}
+    }
+    \cref{\seq_use:Nnnn \@@@labels {,}{,}{,}}
+}}
+\cs_generate_variant:Nn \@@sections@cmn@ref@list:nn {nV}
+
+
+% reference a specified label
+%   #1  - full label
+\cs_new_protected:Npn \@@sections@cmn@ref@raw:n #1
+{{
+    \cref{#1}
+}}
+
+
+% reference all labels of the specified base label
+%   #1  - reference table:prop || -No Value-
+%   #2  - base label
+\cs_new_protected:Npn \@@sections@cmn@ref@all:Nn #1 #2
+{{
+    \tl_clear_new:N \@@@labels
+    \prop_get:NnNT #1 {#2} \@@@labels
+    {
+        \@@sections@cmn@ref@list:nV {#2} \@@@labels
+    }
+}}
+
+
+\texcode{}

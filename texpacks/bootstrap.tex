@@ -22,15 +22,20 @@
     \usepackage{threeparttable    } % automatic table caption's width
 }{}
 
-% hyperreferences
+% references
 \moduleCode
 {
-    \usepackage[hidelinks]{hyperref}
+	\usepackage[hidelinks]{hyperref}
 }{}
-
+	
 \input{./packages/texcode.tex}
 \input{./packages/math.tex}
 \input{./packages/langs/ru.tex}
+
+\moduleCode
+{
+	\usepackage[english, russian]{cleveref}
+}{}
 
 \moduleCode
 {   % common typography

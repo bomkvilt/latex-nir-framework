@@ -13,11 +13,14 @@
 
     {%- for eq in eqs %}
     % if (!#2 || (#2 && #2 == '{{!eq.label!}}')) -- the equation must kept
-    \bool_if:nT { \tl_if_novalue_p:n{#2} || \str_if_eq_p:nn{ {{!eq.label!}} }{ #2 } }
+    \bool_if:nT { \tl_if_novalue_p:n{#2} || \str_if_eq_p:nn{ {{!eq.label!}} }{#2} }
     {
+        {% if (eqs|length) > 1 and eq.label != '' -%}
+        \registerEquationPart{#1}{ {{!eq.label!}} }
+        {%- endif %}
         \begin{equation}
             {% if (eqs|length) > 1 and eq.label != '' -%}
-            \IfValueT{#1} { \label{#1--{{!eq.label!}} } }
+            \IfValueT{#1} { \label{#1--{{!eq.label!}}} }
             {%- else -%}
             \IfValueT{#1} { \label{#1} }
             {%- endif %}
