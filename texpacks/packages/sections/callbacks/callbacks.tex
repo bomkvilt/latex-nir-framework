@@ -1,0 +1,58 @@
+\texcode{on}
+
+% >> -----------------------------------------------------------------------------------------------
+% >> user interface
+% >> -----------------------------------------------------------------------------------------------
+
+% Mark the file as section
+\NewDocumentCommand{\sectionfile}{  }
+{
+    % initialize sections' env
+    \@@sections@clb@level@on{s}
+    % set a callback that will deinitialize the level
+    \registerOnCloseEvent{\@@sections@clb@level@off{s}}
+}
+
+% Mark the file as part
+\NewDocumentCommand{\partfile}{  }
+{
+    % initialize sections' env
+    \@@sections@clb@level@on{p}
+    % set a callback that will deinitialize the level
+    \registerOnCloseEvent{\@@sections@clb@level@off{p}}
+}
+
+
+% >> -----------------------------------------------------------------------------------------------
+% >> callbacks
+% >> -----------------------------------------------------------------------------------------------
+
+
+% start a new level
+% #1 - level's letter
+%    s - section
+%    p - part   
+\NewDocumentCommand{\@@sections@clb@level@on}{ m }
+{
+    % equations: open frame
+    \@@sections@eqns@frame<#1>{\curbase/eqns/}{on}
+}
+
+
+\NewDocumentCommand{\@@sections@clb@level@off}{ m }
+{
+    % equations: close frame
+    \@@sections@eqns@frame<#1>{}{off}
+}
+
+
+\NewDocumentCommand{\@@sections@clb@section@off}{}
+{ \@@sections@clb@level@off{s} }
+
+
+\NewDocumentCommand{\sectionsclbpartoff}{}
+{ \@@sections@clb@level@off{p} }
+
+
+
+\texcode{}
