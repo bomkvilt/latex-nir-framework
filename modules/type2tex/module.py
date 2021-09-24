@@ -52,5 +52,5 @@ class Type2LaTeXModule(ModuleBase):
         # scan found directories and and convert found equations
         for resdir in rootNode.GetAllResources('equations', bGlobal = True):
             print(resdir)
-            for epspath in glob.iglob(f'{resdir}/*.eps'):
+            for epspath in glob.iglob(f'{resdir}/**/*.eps', recursive = True):
                 self._converter.Convert(epspath, bForce)
