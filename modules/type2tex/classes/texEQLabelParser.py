@@ -1,13 +1,38 @@
+from ...includes import Singleton
 from .baseTexParser import BaseTexParser
 
+import string
 import re
 
+
+
+class _numToString(metaclass = Singleton):
+    def __init__(self) -> None:
+        self.base = len(string.ascii_lowercase)
+        self.num2letter = dict(zip(
+            range(self.base),
+            string.ascii_lowercase
+        ))
+    
+    # 1  -> a
+    # 26 -> z
+    # 27 -> aa
+    def convert(self, num: int) -> str:
+        assert(num > 0)
+
+        ans = ''
+        while num > 0:
+            rem = (self.base + num % self.base - 1) % self.base
+            num = num // self.base
+            ans = self.num2letter[rem] + ans
+        return ans
 
 
 class EquationData:
     def __init__(self) -> None:
         self.label:str
         self.data:str
+        self.id:str
 
 
 class _arrayUnwrapper(BaseTexParser):
@@ -49,6 +74,7 @@ class TexEQLabelParser(BaseTexParser):
             eqdata = EquationData()
             eqdata.label = ''
             eqdata.data  = equation
+            eqdata.id    = 'a'
             return [eqdata]
         return self._extractEquation(entery)        
 
@@ -75,4 +101,12 @@ class TexEQLabelParser(BaseTexParser):
         # compleate last equation block
         eqdata      = equations[-1]
         eqdata.data = equation[coursor:]
+        return self._addIDs(equations)
+
+    def _addIDs(self, equations: list[EquationData]) -> list[EquationData]:
+        generator = _numToString()
+        counter   = 1
+        for eqdata in equations:
+            eqdata.id = generator.convert(counter)
+            counter  += 1
         return equations
