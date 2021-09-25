@@ -85,14 +85,36 @@
         \tl_set:Nn #1 {#4}
     }
     {
-        \tl_clear_new:N \@@@prefix
-        \@@sections@eqns@load:Nnn \@@@prefix {labels} {#2}
-
-        % if a global naming is in use
         \bool_if:nTF { #3 }
-        { \tl_set:Nx #1 {eqn:#4} }
-        { \tl_set:Nx #1 {eqn:#4@\@@@prefix} }
+        { 
+            % create a global label
+            \tl_set:Nx #1 {eqn:#4} 
+        }
+        { 
+            % create a local label
+            \tl_clear_new:N \@@@prefix
+            \@@sections@eqns@load:Nnn \@@@prefix {labels} {#2}
+            
+            \tl_set:Nx #1 {eqn:#4@\@@@prefix} 
+        }
     }
+}
+
+% create equation labels
+%  #1:tl    - output variable
+%  #2       - level's letter
+%  #3       - b use global label names
+%  #4       - equatoin's label
+\cs_new_protected:Npn \@@sections@eqns@makeLabels:Nnnn #1 #2 #3 #4
+{
+    \seq_clear_new:N \@@@labels
+    \tl_clear_new:N  \@@@label
+    \clist_map_inline:nn { #4 }
+    {
+        \@@sections@eqns@makeLabel:Nnnn \@@@label {#2}{#3}{##1}
+        \seq_push:NV \@@@labels \@@@label
+    }
+    \tl_set:Nx #1 {\seq_use:Nnnn \@@@labels {,}{,}{,}}
 }
 
 
@@ -171,9 +193,9 @@
 % d #4  - equation's parts: csv
 \NewDocumentCommand{\refEq}{ r<> s m d<>}
 {{
-    \tl_clear_new:N \@@@label
-    \@@sections@eqns@makeLabel:Nnnn \@@@label {#1}{#2}{#3}
-    \@@sections@cmn@ref:NVn \@@sections@eqns@labelDB \@@@label {#4}
+    \tl_clear_new:N \@@@labels
+    \@@sections@eqns@makeLabels:Nnnn \@@@labels {#1}{#2}{#3}
+    \@@sections@cmn@ref:NVn \@@sections@eqns@labelDB \@@@labels {#4}
 }}
 
 
