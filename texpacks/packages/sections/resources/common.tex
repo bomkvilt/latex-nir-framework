@@ -8,7 +8,7 @@
 \cs_new_protected:Npn \@@sections@cmn@ref:Nnn #1 #2 #3
 {{
     % #3 -> ref{#2--v: v \in #3}
-    % #1 -> ref{#2--v: v \in labels{#2}}
+    % #1 -> ref{#2--v: v \in labels{#2}} || labels{#2}
     % else -> ref{#2}
     \bool_if:nTF {! \tl_if_novalue_p:n {#3}}
     { \@@sections@cmn@ref@list:nn{#2}{#3} }
@@ -45,15 +45,15 @@
 
 
 % reference all labels of the specified base label
-%   #1  - reference table:prop || -No Value-
+%   #1  - reference table:prop
 %   #2  - base label
+% \note if the table not contains the label the command will be falled back to a @raw realisation
 \cs_new_protected:Npn \@@sections@cmn@ref@all:Nn #1 #2
 {{
     \tl_clear_new:N \@@@labels
-    \prop_get:NnNT #1 {#2} \@@@labels
-    {
-        \@@sections@cmn@ref@list:nV {#2} \@@@labels
-    }
+    \prop_get:NnNTF #1 {#2} \@@@labels
+    { \@@sections@cmn@ref@list:nV {#2} \@@@labels }
+    { \@@sections@cmn@ref@raw:n {#2} }
 }}
 
 
