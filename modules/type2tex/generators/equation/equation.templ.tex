@@ -33,12 +33,14 @@
     \registerEquationPart{#1}{ {{!eq.label!}} }
     {%- endif %}
     \begin{equation}
+    \begin{gathered}
         {% if eq.label != '' -%}
         \IfValueT{#1} { \label{#1--{{!eq.label!}}} }
         {%- else -%}
         \IfValueT{#1} { \label{#1} }
         {%- endif %}
         {{!eq.data!}}
+    \end{gathered}
     \end{equation}
 }
 {%- endfor %}

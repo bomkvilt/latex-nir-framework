@@ -80,27 +80,27 @@ class TexEQLabelParser(BaseTexParser):
 
     def _extractEquation(self, equation: str) -> list[EquationData]:
         # extract labels and split equation
-        coursor = 0
+        cursor = 0
         equations = list[EquationData]()
         for match in self._matcher.finditer(equation):
             i0, i1 = match.regs[0]
             # save previous data block
             if (len(equations) > 0):
                 eqdata      = equations[-1]
-                eqdata.data = equation[coursor:i0]
-            coursor = i1
+                eqdata.data = equation[cursor:i0]
+            cursor = i1
             # create a new block
             eqdata       = EquationData()
             eqdata.label = match.group(1)
             equations.append(eqdata)
-        # if equation have no labels
+        # if the equation has no labels
         if (len(equations) == 0):
             eqdata = EquationData()
             eqdata.label = ''
             equations.append(eqdata)
-        # compleate last equation block
+        # flush rest substrings
         eqdata      = equations[-1]
-        eqdata.data = equation[coursor:]
+        eqdata.data = equation[cursor:]
         return self._addIDs(equations)
 
     def _addIDs(self, equations: list[EquationData]) -> list[EquationData]:

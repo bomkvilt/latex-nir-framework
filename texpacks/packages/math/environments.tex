@@ -1,0 +1,57 @@
+\texcode{on}
+
+% >> feet equation to page: https://stackoverflow.com/a/55750239 <<
+\newlength{\math@eqlen }
+\newlength{\math@offset} \setlength{\math@offset}{15mm}
+
+
+% rewrite specified environment to force it be clamped to
+% \linewidth - \math@offset
+\newcommand{\@@math@limitEnvironmentsWidth}[1]
+{
+    \tl_clear_new:N \@@@bgn@saved
+    \tl_clear_new:N \@@@end@saved
+    \tl_set:Nn \@@@bgn@saved {@@math@old@#1@bgn}
+    \tl_set:Nn \@@@end@saved {@@math@old@#1@end}
+
+    \@@math@makeCommand:Vn \@@@bgn@saved {#1}
+    \@@math@makeCommand:Vn \@@@end@saved {end#1}
+    \@@math@renewEnviron:nVV {#1} \@@@bgn@saved \@@@end@saved
+}
+
+
+% #1 command backup's name
+% #2 command's name
+\cs_new_protected:Npn \@@math@makeCommand:nn #1 #2
+{
+    \csletcs{#1}{#2}
+}
+\cs_generate_variant:Nn \@@math@makeCommand:nn {Vn}
+
+
+% #1 - environment's name
+% #2 - old @begin
+% #3 - old @end
+\cs_new_protected:Npn \@@math@renewEnviron:nnn #1 #2 #3
+{
+    \RenewEnviron{#1}
+    {
+        \settowidth{\math@eqlen}{$\BODY$}
+        
+        \csname#2\endcsname
+        \ifdimcomp{\linewidth - \math@offset}{>}{\math@eqlen}
+        {                                          \ensuremath{\BODY}  }
+        { \resizebox{\linewidth - \math@offset}{!}{\ensuremath{\BODY}} }
+        \csname#3\endcsname
+    }
+}
+\cs_generate_variant:Nn \@@math@renewEnviron:nnn {nVV}
+
+
+\@@math@limitEnvironmentsWidth{equation}
+\@@math@limitEnvironmentsWidth{multline}
+\@@math@limitEnvironmentsWidth{align}
+\@@math@limitEnvironmentsWidth{split}
+
+
+\texcode{}
