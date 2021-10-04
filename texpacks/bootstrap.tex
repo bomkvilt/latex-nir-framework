@@ -14,23 +14,45 @@
 	\usepackage{xspace   }
 }{}
 
+\input{./packages/texcode.tex}
+\input{./packages/math/math.tex}
+\input{./packages/langs/ru.tex}
+
 % import table packages
+\texcode{on}
 \moduleCode
 {
-	\usepackage{ltablex , booktabs} % long tables
+	\usepackage{tabularx, booktabs} % tables
     \usepackage{multirow, makecell} % improved table formatting
     \usepackage{threeparttable    } % automatic table caption's width
+
+	%% for nested tabularx envoronmenrs:
+	%  
+	%	\begin{tabularx}{\textwidth}{|X|X|X|}
+	%		...
+	%		{ % << open a new group
+	%			\begin{tabularx}{\cellwidth}{lX} % << use \cellwidth instead of \textwidth
+	%				Name:       & \hrulefill \\
+	%				Race:       & \hrulefill \\
+	%				Profession: & \hrulefill \\
+	%			\end{tabularx}
+	%		} &
+	%		...
+	%	\end{tabularx}
+	\newcommand\cellwidth{\TX@col@width}
+	
+	\newcolumntype{Y}{>{\centering\arraybackslash}X}
+	
+	\renewcommand\tabularxcolumn[1]{m{#1}}
 }{}
+\texcode{}
 
 % references
 \moduleCode
 {
 	\usepackage[hidelinks]{hyperref}
 }{}
-	
-\input{./packages/texcode.tex}
-\input{./packages/math/math.tex}
-\input{./packages/langs/ru.tex}
+
 
 \moduleCode
 {
