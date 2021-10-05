@@ -20,7 +20,12 @@ class _texEscaper(metaclass = Singleton):
             (r'{{!', r'<<<1__>>>', r'{{'),
             (r'!}}', r'<<<2__>>>', r'}}'),
             # escape statement blocks
+            # \note '{!' & '!}' were invented to keep latex syntax in
+            #   template documents in single-row constryctions since 
+            #   '{% ..' get parsed as text('{') + comment('% ..')
             (r'{%' , r'<<<1_ >>>', r'{%'),
+            (r'{!' , r'<<<1_ >>>', r'{%'),
+            (r'!}' , r'<<<2_ >>>', r'%}'),
             (r'%}' , r'<<<2_ >>>', r'%}'),
         ]
 

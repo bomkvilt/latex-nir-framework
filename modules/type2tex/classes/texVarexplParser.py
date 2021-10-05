@@ -8,6 +8,7 @@ class VariableExplanation:
     def __init__(self) -> None:
         self.key:str
         self.val:str
+        self.math:str
 
 
 class TexVarexplParser(BaseTexParser):
@@ -19,7 +20,7 @@ class TexVarexplParser(BaseTexParser):
         splitkey = r';;'
         valuekey = '({})'.format(self.TEXT(r'.*?'))
         # compile a regular expression
-        self._pattern = f'({openkey + valuekey + splitkey + valuekey + closekey})' + r'(?:\\\\)?'
+        self._pattern = f'({openkey + valuekey + splitkey + valuekey}(?:{splitkey + valuekey})?{closekey})' + r'(?:\\\\)?'
         self._matcher = re.compile(self._pattern)
 
     ##
@@ -30,8 +31,9 @@ class TexVarexplParser(BaseTexParser):
         expls = list[VariableExplanation]()
         for match in self._matcher.finditer(equation):
             expl = VariableExplanation()
-            expl.key = match.group(2)
-            expl.val = match.group(3)
+            expl.key  = match.group(2)
+            expl.val  = match.group(3)
+            expl.math = match.group(4)
             expls.append(expl)
         return expls
 
