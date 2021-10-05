@@ -1,30 +1,221 @@
 \texcode{on}
 
+% >> -----------------------------------------------------------------------------------------------
+% >> resource envoronments
+% 
+% Since we have several types of resources like equations and tables that require simular
+%   tools to keep current entities roots, to generate label names and to reference labels
+%   it's good to place the logic to one layer that will control the processes
+% >> -----------------------------------------------------------------------------------------------
+
+
+\seq_new:N \@@sections@res@resources
+
+
+% define a new resource type
+% #1 - reource group; must be made of chars only
+% #2 - label prefix
+% #3 - path postfix
+% \note resource is a set of the tables:
+%   pathTable       -   level letter -> base path that's associated with the letter
+%   labelTable      -   level letter -> letter's postfix must be joined with short label name
+%   sublabelsTable  -   full label   -> list of suffixes of labels that are packed to the full label
+\NewDocumentCommand{\@@sections@res@newResourceType}{ m m m }
+{{
+    \seq_if_in:NnT \@@sections@res@resources {#1}
+    {
+        \msg_error:nnx {@@sections}{generic}{Resource~type~#1~is~already~registered}
+    }
+    \seq_gpush:Nn \@@sections@res@resources {#1}
+    \prop_gclear_new:c {@@@sections@#1@pathTable}
+    \prop_gclear_new:c {@@@sections@#1@labelTable}
+    \prop_gclear_new:c {@@@sections@#1@sublabelsTable}
+    
+    % create a label prefix
+    \tl_gclear_new:c {@@@sections@#1@labelPrefix}
+    \tl_gset:cx      {@@@sections@#1@labelPrefix}{#2}
+
+    % create a path postfix
+    \tl_gclear_new:c {@@@sections@#1@pathPostfix}
+    \tl_gset:cx      {@@@sections@#1@pathPostfix}{#3}
+}}
+
+\msg_new:nnn{@@sections}{generic}{ #1 }
+
+
+
+% keys to parse \@@sections@res@frame 's arguments
+\keys_define:nn { @@sections@res / frame }
+{
+    bOpen .multichoice:,
+    bOpen / on      .code:n = \bool_set_true:N  \@@@bOpen,
+    bOpen / off     .code:n = \bool_set_false:N \@@@bOpen,
+    bOpen / unknown .code:n = \msg_error:nnxxx { sections } { unknown-choice }
+        { key } { on, off } { \exp_not:n {#1} }
+}
+
+
+% open or close a new frame
+%  #1 - frame letter (type)
+%  #2 - frame path
+%  #3 - state \in {on, off}
+\NewDocumentCommand{\@@sections@res@frame}{ r<> m m}
+{{
+    % init a \@@@bOpen variable
+    \keys_set:nn { @@sections@res / frame } { bOpen = #3 }
+
+    
+    % open or close frames of all registred resources
+    \seq_map_inline:Nn \@@sections@res@resources
+    {
+        \typeout{****************|##1|}
+        % check if the frame operation can be done
+        \bool_set:Nn \@@@bOpened {
+            \prop_if_in_p:cn {@@@sections@##1@pathTable}  {#1} ||
+            \prop_if_in_p:cn {@@@sections@##1@labelTable} {#1} 
+        }
+        \bool_xor:nnF {\@@@bOpen}{\@@@bOpened}
+        { 
+            \msg_error:nnx {@@sections}{generic}{resource cannot be opend or closed twice: #1} 
+        }
+
+        % operate over the frame
+        \bool_if:NTF \@@@bOpen
+        {   % open a frame
+            \prop_gput:cnx {@@@sections@##1@pathTable}  {#1} {#2\tl_use:c{@@@sections@##1@pathPostfix}}
+            \prop_gput:cnn {@@@sections@##1@labelTable} {#1} {#2}
+        }
+        {   % close the frame
+            \prop_gremove:cn {@@@sections@##1@pathTable}  {#1}
+            \prop_gremove:cn {@@@sections@##1@labelTable} {#1}
+        }
+    }
+}}
+
+
+% load specified resource to a variable
+% #1:tl - output variable
+% #2    - resource group
+% #3    - table name
+% #4    - table key
+\cs_new_protected:Npn \@@sections@res@load:Nnnn #1 #2 #3 #4
+{
+    \prop_get:cnNF {@@@sections@#2@#3} {#4} #1
+    {
+        \msg_error:nnx {@@sections}{generic}{resource~cannot~be~found:~#2/#3[#4]} 
+    }
+}
+
+% create a label
+%  #1:tl    - output variable
+%  #2       - resource group
+%  #3       - level's letter
+%  #4       - b use global label names
+%  #5       - equatoin's label
+\cs_new_protected:Npn \@@sections@res@makeLabel:Nnnnn #1 #2 #3 #4 #5
+{
+    % \todo should I spend compiler's resources to check resource group?
+    \tl_if_novalue:nTF {#5}
+    {
+        \tl_set:Nx #1 {#5}
+    }
+    {
+        % resource group's tag
+        \tl_clear_new:N \@@@tag
+        \tl_set:Nx      \@@@rag {\tl_use:c {@@@sections@#3@labelPrefix}}
+
+        % set a label
+        \bool_if:nTF { #4 }
+        { 
+            % create a global label
+            \tl_set:Nx #1 {\@@@tag#5} 
+        }
+        { 
+            \tl_clear_new:N           \@@@base
+            \@@sections@res@load:Nnnn \@@@base {#2}{labelTable}{#3}
+            
+            % create a local label
+            \tl_set:Nx #1 {\@@@tag#5@\@@@base} 
+        }
+    }
+}
+
+% create csv list of full labels from csv-list of short labels
+%  #1:tl    - output variable (csv)
+%  #2       - resource group
+%  #3       - level's letter
+%  #4       - b use global label names
+%  #5       - equatoin labels (csv)
+\cs_new_protected:Npn \@@sections@res@makeLabels:Nnnnn #1 #2 #3 #4 #5
+{
+    \seq_clear_new:N \@@@labels
+    \tl_clear_new:N  \@@@label
+    \typeout{----------|#5|}
+    \clist_map_inline:nn { #5 }
+    {
+        \@@sections@res@makeLabel:Nnnnn \@@@label {#2}{#3}{#4}{##1}
+        \seq_push:NV \@@@labels \@@@label
+    }
+    \tl_set:Nx #1 {\seq_use:Nnnn \@@@labels {,}{,}{,}}
+}
+
+% assign suffix to specified label
+% #1 - resource group
+% #2 - full label name
+% #3 - suffix of a subentity
+\cs_new_protected:Npn \@@sections@res@addSublabel:nnn #1 #2 #3
+{{
+    \tl_clear_new:N \@@@parts
+    \prop_get:cnNTF {@@@sections@#1@sublabelsTable}{#2} \@@@parts
+    { \tl_set:Nx \@@@parts {\@@@parts,#3} }
+    { \tl_set:Nx \@@@parts {#3} }
+
+    \prop_gput:cnx {@@@sections@#1@sublabelsTable}{#2}{\@@@parts}
+}}
+
+
+% >> -----------------------------------------------------------------------------------------------
+% >> reference specified entities
+% >> -----------------------------------------------------------------------------------------------
+
+% reference specified entities from specified resource group
+% #1 - resource group
+% #2 - level letter
+% #3 - b use global label names
+% #4 - short label
+% #5 - sublabels:csv || -No Value-
+\cs_new_protected:Npn \@@sections@res@ref:nnnnn #1 #2 #3 #4 #5
+{{
+    \tl_clear_new:N \@@@labels
+    \@@sections@res@makeLabels:Nnnnn \@@@labels {#1}{#2}{#3}{#4}
+    \@@sections@res@ref:cVn {@@@sections@#1@sublabelsTable} \@@@labels {#5}
+}}
+
 
 % reference specfied entities
 %   #1  - reference table || -No Value-
 %   #2  - full label
 %   #3  - sublabels:csv || -No Value-
-\cs_new_protected:Npn \@@sections@cmn@ref:Nnn #1 #2 #3
+\cs_new_protected:Npn \@@sections@res@ref:Nnn #1 #2 #3
 {{
     % #3 -> ref{#2--v: v \in #3}
-    % #1 -> ref{#2--v: v \in labels{#2}} || labels{#2}
+    % #1 -> ref{#2--v: v \in labels{#2}} || ref{#2}
     % else -> ref{#2}
     \bool_if:nTF {! \tl_if_novalue_p:n {#3}}
-    { \@@sections@cmn@ref@list:nn{#2}{#3} }
+    { \@@sections@res@ref@list:nn{#2}{#3} }
     { 
         \bool_if:nTF {! \tl_if_novalue_p:n {#1}}
-        { \@@sections@cmn@ref@all:Nn{#1}{#2} }
-        { \@@sections@cmn@ref@raw:n {#2} }
+        { \@@sections@res@ref@all:Nn{#1}{#2} }
+        { \@@sections@res@ref@raw:n {#2} }
     }
 }}
-\cs_generate_variant:Nn \@@sections@cmn@ref:Nnn {NVn}
+\cs_generate_variant:Nn \@@sections@res@ref:Nnn {NVn, cVn}
 
 
 % reference specified sublabels
 %   #1  - full lable
 %   #2  - sublabels:csv
-\cs_new_protected:Npn \@@sections@cmn@ref@list:nn #1 #2
+\cs_new_protected:Npn \@@sections@res@ref@list:nn #1 #2
 {{
     \seq_clear_new:N \@@@labels
     \clist_map_inline:nn { #2 }
@@ -33,12 +224,12 @@
     }
     \cref{\seq_use:Nnnn \@@@labels {,}{,}{,}}
 }}
-\cs_generate_variant:Nn \@@sections@cmn@ref@list:nn {nV}
+\cs_generate_variant:Nn \@@sections@res@ref@list:nn {nV}
 
 
 % reference a specified label
 %   #1  - full label
-\cs_new_protected:Npn \@@sections@cmn@ref@raw:n #1
+\cs_new_protected:Npn \@@sections@res@ref@raw:n #1
 {{
     \cref{#1}
 }}
@@ -48,12 +239,12 @@
 %   #1  - reference table:prop
 %   #2  - base label
 % \note if the table not contains the label the command will be falled back to a @raw realisation
-\cs_new_protected:Npn \@@sections@cmn@ref@all:Nn #1 #2
+\cs_new_protected:Npn \@@sections@res@ref@all:Nn #1 #2
 {{
     \tl_clear_new:N \@@@labels
     \prop_get:NnNTF #1 {#2} \@@@labels
-    { \@@sections@cmn@ref@list:nV {#2} \@@@labels }
-    { \@@sections@cmn@ref@raw:n {#2} }
+    { \@@sections@res@ref@list:nV {#2} \@@@labels }
+    { \@@sections@res@ref@raw:n {#2} }
 }}
 
 

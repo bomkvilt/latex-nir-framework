@@ -4,130 +4,11 @@
 % >> init section environment
 % >> -----------------------------------------------------------------------------------------------
 
-
-% local databases
-% \note must be a global object
-\prop_new:N \@@sections@eqs@paths
-\prop_new:N \@@sections@eqs@labels
-\prop_new:N \@@sections@eqns@labelDB
-
-
-% keys to parse \@@sections@eqns@frame 's arguments
-\keys_define:nn { @@sections@eqs / frame }
-{
-    bOpen .multichoice:,
-    bOpen / on      .code:n = \bool_set_true:N  \@@@bOpen,
-    bOpen / off     .code:n = \bool_set_false:N \@@@bOpen,
-    bOpen / unknown .code:n = \msg_error:nnxxx { sections } { unknown-choice }
-        { key } { on, off } { \exp_not:n {#1} }
-}
-
-
-% open or close document frame
-%  #1   - frame letter (type)
-%  #2   - frame path
-%  #3   - state \in {on, off}
-\NewDocumentCommand{\@@sections@eqns@frame}{ r<> m m}
-{{
-    % init a \@@@bOpen variable
-    \keys_set:nn { @@sections@eqs / frame } { bOpen = #3 }
-
-    \bool_if:NTF \@@@bOpen
-    {   % open a frame
-        \bool_if:nT {
-            \prop_if_in_p:Nn \@@sections@eqs@paths  {#1} ||
-            \prop_if_in_p:Nn \@@sections@eqs@labels {#1}
-        } 
-        {
-            \msg_error:nnx { sections } { already opend frame level cannot be opened } { #1 }
-        }
-
-        \prop_gput:Nnn \@@sections@eqs@paths  {#1} {#2}
-        \prop_gput:Nnn \@@sections@eqs@labels {#1} {#2}
-    }
-    {   % close the frame
-        \bool_if:nF {
-            \prop_if_in_p:Nn \@@sections@eqs@paths  {#1} &&
-            \prop_if_in_p:Nn \@@sections@eqs@labels {#1}
-        } 
-        {
-            \msg_error:nnx { sections } { already closed frame level cannot be closed } { #1 }
-        }
-        
-        \prop_gremove:Nn \@@sections@eqs@paths  {#1}
-        \prop_gremove:Nn \@@sections@eqs@labels {#1}
-    }
-}}
-
-
-% load specified source's value for a specific key
-%  #1:tl    - output variavle
-%  #2       - souce name
-%  #3       - the source's level
-\cs_new_protected:Npn \@@sections@eqns@load:Nnn #1 #2 #3
-{
-    \prop_get:cnNF {@@sections@eqs@#2} {#3} #1
-    {
-        \msg_error:nnx { sections } { cannot find a key in a table } { #3 } { #2 }
-    }
-}
-
-
-% create equation label
-%  #1:tl    - output variable
-%  #2       - level's letter
-%  #3       - b use global label names
-%  #4       - equatoin's label
-\cs_new_protected:Npn \@@sections@eqns@makeLabel:Nnnn #1 #2 #3 #4
-{
-    \tl_if_novalue:nTF {#4}
-    {
-        \tl_set:Nn #1 {#4}
-    }
-    {
-        \bool_if:nTF { #3 }
-        { 
-            % create a global label
-            \tl_set:Nx #1 {eqn:#4} 
-        }
-        { 
-            % create a local label
-            \tl_clear_new:N \@@@prefix
-            \@@sections@eqns@load:Nnn \@@@prefix {labels} {#2}
-            
-            \tl_set:Nx #1 {eqn:#4@\@@@prefix} 
-        }
-    }
-}
-
-% create equation labels
-%  #1:tl    - output variable
-%  #2       - level's letter
-%  #3       - b use global label names
-%  #4       - equatoin's label
-\cs_new_protected:Npn \@@sections@eqns@makeLabels:Nnnn #1 #2 #3 #4
-{
-    \seq_clear_new:N \@@@labels
-    \tl_clear_new:N  \@@@label
-    \clist_map_inline:nn { #4 }
-    {
-        \@@sections@eqns@makeLabel:Nnnn \@@@label {#2}{#3}{##1}
-        \seq_push:NV \@@@labels \@@@label
-    }
-    \tl_set:Nx #1 {\seq_use:Nnnn \@@@labels {,}{,}{,}}
-}
-
-
-% add part to specified 
-\cs_new_protected:Npn \@@sections@eqns@addSublabel:nn #1 #2
-{{
-    \tl_clear_new:N \@@@parts
-    \prop_get:NnNTF \@@sections@eqns@labelDB {#1} \@@@parts
-    { \tl_set:Nx \@@@parts {\@@@parts,#2} }
-    { \tl_set:Nx \@@@parts {#2} }
-
-    \prop_gput:Nnx \@@sections@eqns@labelDB {#1} {\@@@parts}
-}}
+% create a new resource type
+% #1 - resource group
+% #2 - label prefix
+% #3 - subpath
+\@@sections@res@newResourceType{eqs}{eqs:}{/eqns}
 
 
 % input specified equations
@@ -166,21 +47,27 @@
 % s #6  - ignore varexpl section
 \NewDocumentCommand{\addEquation}{ r<> m s o d<> s}
 {{
+    % path to equation
     \tl_clear_new:N \@@@path
-    \@@sections@eqns@load:Nnn \@@@path {paths}{#1}
+    \@@sections@res@load:Nnnn \@@@path {eqs}{pathTable}{#1}
     \tl_set:Nx \@@@path {\@@@path/#2.tex}
 
+    % create a base equation label
     \tl_clear_new:N \@@@label
-    \@@sections@eqns@makeLabel:Nnnn \@@@label {#1}{#3}{#4}
+    \@@sections@res@makeLabel:Nnnnn \@@@label {eqs}{#1}{#3}{#4}
 
+    % import specified subequations with the label
     \@@sections@eqns@input:VVnn \@@@path \@@@label {#5}{#6} 
 }}
 
 
+% register specofied suffix to specified label
+% #1 - full label name
+% #2 - sublabel
 \NewDocumentCommand{\registerEquationPart}{ m m }
-{{
-    \@@sections@eqns@addSublabel:nn{#1}{#2}
-}}
+{
+    \@@sections@res@addSublabel:nnn {eqs}{#1}{#2}
+}
 
 
 % reference equation
@@ -192,11 +79,9 @@
 % m #3  - equation label
 % d #4  - equation's parts: csv
 \NewDocumentCommand{\refEq}{ r<> s m d<>}
-{{
-    \tl_clear_new:N \@@@labels
-    \@@sections@eqns@makeLabels:Nnnn \@@@labels {#1}{#2}{#3}
-    \@@sections@cmn@ref:NVn \@@sections@eqns@labelDB \@@@labels {#4}
-}}
+{
+    \@@sections@res@ref:nnnnn {eqs}{#1}{#2}{#3}{#4}
+}
 
 
 \texcode{}

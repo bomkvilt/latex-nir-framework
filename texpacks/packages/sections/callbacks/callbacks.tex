@@ -34,15 +34,13 @@
 %    p - part   
 \NewDocumentCommand{\@@sections@clb@level@on}{ m }
 {
-    % equations: open frame
-    \@@sections@eqns@frame<#1>{\curbase/eqns/}{on}
+    \@@sections@res@frame<#1>{\curbase}{on}
 }
 
 
 \NewDocumentCommand{\@@sections@clb@level@off}{ m }
 {
-    % equations: close frame
-    \@@sections@eqns@frame<#1>{}{off}
+    \@@sections@res@frame<#1>{}{off}
 }
 
 
