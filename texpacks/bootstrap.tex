@@ -22,7 +22,7 @@
 \texcode{on}
 \moduleCode
 {
-	\usepackage{tabularx, booktabs} % tables
+	\usepackage{tabularx, xltabular, booktabs} % tables unitary and long
     \usepackage{multirow, makecell} % improved table formatting
     \usepackage{threeparttable    } % automatic table caption's width
 
@@ -41,8 +41,10 @@
 	%	\end{tabularx}
 	\newcommand\cellwidth{\TX@col@width}
 	
+	% add a X-column's variant that's alligned by h-center
 	\newcolumntype{Y}{>{\centering\arraybackslash}X}
 	
+	% set v-centering by default
 	\renewcommand\tabularxcolumn[1]{m{#1}}
 }{}
 \texcode{}
