@@ -10,6 +10,7 @@
 % #2 - subequation label
 \DeclareDocumentCommand{\printEquations}{ o o }
 {{
+    \def\arraystretch{2}
     {%- set eqs = vars['equations'] %}
 
     {% for eq in eqs %}
