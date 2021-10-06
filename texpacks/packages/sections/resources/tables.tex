@@ -1,0 +1,93 @@
+\texcode{on}
+
+% >> -----------------------------------------------------------------------------------------------
+% >> init section environment
+% 
+% This document contains scripts that allow to create uniform tables along all the document with
+% shorted number of command
+% >> -----------------------------------------------------------------------------------------------
+
+% create a new resource type
+% #1 - resource group
+% #2 - label prefix
+% #3 - subpath
+\@@sections@res@newResourceType{tabs}{tabs:}{/tabs}
+
+
+% #1 - caption function
+% #2 - caption
+% #3 - level's letter
+% #4 - b use global label names
+% #5 - short label's name
+\NewDocumentCommand{\@@sections@tabs@genCaption}{ m m m m m }
+{{
+    \bool_if:nT {
+        ! \tl_if_novalue_p:n{#2} &&
+        ! \tl_if_novalue_p:n{#3} &&
+        ! \tl_if_novalue_p:n{#5}
+    } {
+        \tl_clear_new:N \@@@label
+        \@@sections@res@makeLabel:Nnnnn \@@@label {tabs}{#3}{#4}{#5}
+
+        #1{#2} \label{\@@@label}
+    }
+}}
+
+
+\newcommand{\@@sections@tabs@caption}[1]
+{
+    \captionof{table}{#1}
+}
+
+
+% create a new table
+% >> ----------------------------------| table topo
+% O #1 - table width
+% m #2 - columns pattern
+% >> ----------------------------------| label
+% d #3 - level's letter
+% s #4 - b use global label names
+% o #5 - short label's name
+% o #6 - caption
+% >>
+\NewDocumentEnvironment{sectable}{ O{\textwidth} m d<> s o o}
+{
+    \xltabular{#1}{#2}
+        \@@sections@tabs@genCaption {\caption}{#6}{#3}{#4}{#5}
+} 
+{
+    \endxltabular
+}
+% >>
+\NewDocumentEnvironment{atomictable}{ O{\textwidth} m d<> s o o}
+{
+    \@@sections@tabs@genCaption {\@@sections@tabs@caption}{#6}{#3}{#4}{#5}
+    \tabularx{#1}{#2}
+} 
+{
+    \endtabularx
+}
+
+
+% create table headers
+% m #2 - header[1]
+% m #3 - header[x] = header[1]
+% m #4 - footer
+\NewDocumentCommand{\sectableHeaders}{ +m +m +m }
+{{
+    % first header
+    #1 \endfirsthead\hline
+
+    % second header
+    \tl_if_blank:nTF {#2}
+    { #1 }
+    { #2 }
+
+    \endhead\hline
+    
+    % add footer
+    #3 \endfoot\hline
+}}
+
+
+\texcode{}
