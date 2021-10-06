@@ -36,18 +36,20 @@
 \renewcommand\subparagraph{\@startsection{subparagraph}{8}{\parindent}{3.25ex \@plus1ex \@minus .2ex}{-1em}{\normalfont\normalsize\bfseries}}
 
 % set section title formats and spacing
-\titleformat  {\sectionA}{\normalfont\Large     \bfseries}{\thesectionA}{1em}{} % 1
-\titleformat  {\sectionB}{\normalfont\large     \bfseries}{\thesectionB}{1em}{} % 2
-\titleformat  {\sectionC}{\normalfont\large     \bfseries}{\thesectionC}{1em}{} % 3
-\titleformat  {\sectionD}{\normalfont\normalsize\bfseries}{\thesectionD}{1em}{} % 4
-\titleformat  {\sectionE}{\normalfont\normalsize\bfseries}{\thesectionE}{1em}{} % 5
-\titleformat  {\sectionF}{\normalfont\normalsize\bfseries}{\thesectionF}{1em}{} % 6
-\titlespacing*{\sectionA}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex} % 1
-\titlespacing*{\sectionB}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex} % 2
-\titlespacing*{\sectionC}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex} % 3
-\titlespacing*{\sectionD}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex} % 4
-\titlespacing*{\sectionE}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex} % 5
-\titlespacing*{\sectionF}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex} % 6
+% \titleformat {command} [shape] {format} {label} {sep} {before-code} [after-code]
+\titleformat{\sectionA}{\normalfont\Large     \bfseries}{\thesectionA}{1em}{} % 1
+\titleformat{\sectionB}{\normalfont\large     \bfseries}{\thesectionB}{1em}{} % 2
+\titleformat{\sectionC}{\normalfont\large     \bfseries}{\thesectionC}{1em}{} % 3
+\titleformat{\sectionD}{\normalfont\normalsize\bfseries}{\thesectionD}{1em}{} % 4
+\titleformat{\sectionE}{\normalfont\normalsize\bfseries}{\thesectionE}{1em}{} % 5
+\titleformat{\sectionF}{\normalfont\normalsize\bfseries}{\thesectionF}{1em}{} % 6
+
+\titlespacing*{\sectionA}{0pt}{12pt plus 4pt minus 2pt}{10pt plus 2pt minus 2pt} % 1
+\titlespacing*{\sectionB}{0pt}{12pt plus 4pt minus 2pt}{10pt plus 2pt minus 2pt} % 2
+\titlespacing*{\sectionC}{0pt}{12pt plus 4pt minus 2pt}{10pt plus 2pt minus 2pt} % 3
+\titlespacing*{\sectionD}{0pt}{12pt plus 4pt minus 2pt}{10pt plus 2pt minus 2pt} % 4
+\titlespacing*{\sectionE}{0pt}{12pt plus 4pt minus 2pt}{10pt plus 2pt minus 2pt} % 5
+\titlespacing*{\sectionF}{0pt}{12pt plus 4pt minus 2pt}{10pt plus 2pt minus 2pt} % 6
 
 % set token levels
 \def\toclevel@sectionA{1}
@@ -79,7 +81,6 @@
 \def\l@paragraph   {\@dottedtocline{7}{0em}{7em}}
 \def\l@subparagraph{\@dottedtocline{8}{0em}{7em}}
 
-
 % --------------------------------------------------------------------------------------------------
 % >> create a generic section command
 % --------------------------------------------------------------------------------------------------
@@ -91,6 +92,12 @@
 % #4 - section name
 \NewDocumentCommand{\newsection}{s R<>{1} o m}
 {
+    % According to unknown reasons I cannot setup a space before a 
+    % title with use a \titlespacing command. So, it's an only way
+    % I can fix the essue with no large pain
+    \bigskip
+
+    % add section
     \begin{switch}{#2}
         \case{1}{\sectionA{#4}}
         \case{2}{\sectionB{#4}}
