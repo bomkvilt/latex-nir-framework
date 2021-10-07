@@ -57,9 +57,9 @@
     {%- if (varexpls|length) > 0 %}
     \begin{tabularx}{\textwidth}{llX}
         {%- set varexpl = varexpls[0] %}
-        #1 & ${{!varexpl.key!}}$ & --- {{!varexpl.val!}} {!- if varexpl -!}; ${{!varexpl.math!}}$ {!- endif !} \\
+        #1 & ${{!varexpl.key!}}$ & --- {{!varexpl.val!}} {!- if varexpl.math -!}; ${{!varexpl.math!}}$ {!- endif !} \\
         {%- for varexpl in varexpls[1:] %}
-        ~  & ${{!varexpl.key!}}$ & --- {{!varexpl.val!}} {!- if varexpl -!}; ${{!varexpl.math!}}$ {!- endif !} \\
+        ~  & ${{!varexpl.key!}}$ & --- {{!varexpl.val!}} {!- if varexpl.math -!}; ${{!varexpl.math!}}$ {!- endif !} \\
         {%- endfor %}
     \end{tabularx}
     {%- endif %}
