@@ -191,7 +191,7 @@
 {{
     \tl_clear_new:N \@@@labels
     \@@sections@res@makeLabels:Nnnnn \@@@labels {#1}{#2}{#3}{#4}
-    \@@sections@res@ref:cVn {@@@sections@#1@sublabelsTable} \@@@labels {#5}
+    \@@sections@res@ref:cVx {@@@sections@#1@sublabelsTable} \@@@labels {#5}
 }}
 
 
@@ -212,7 +212,7 @@
         { \@@sections@res@ref@raw:n {#2} }
     }
 }}
-\cs_generate_variant:Nn \@@sections@res@ref:Nnn {NVn, cVn}
+\cs_generate_variant:Nn \@@sections@res@ref:Nnn {NVn, cVx}
 
 
 % reference specified sublabels

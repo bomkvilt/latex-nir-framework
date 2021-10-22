@@ -1,0 +1,93 @@
+\texcode{on}
+
+\@@sections@res@newResourceType{figs}{figs:}{/figs}
+
+
+% #1 - caption function
+% #2 - caption
+% #3 - level's letter
+% #4 - b use global label names
+% #5 - short label's name
+\NewDocumentCommand{\@@sections@figs@genCaption}{ m m m m m }
+{{
+    \bool_if:nT {
+        ! \tl_if_novalue_p:n{#2} &&
+        ! \tl_if_novalue_p:n{#3} &&
+        ! \tl_if_novalue_p:n{#5}
+    } {
+        \tl_clear_new:N \@@@label
+        \@@sections@res@makeLabel:Nnnnn \@@@label {figs}{#3}{#4}{#5}
+
+        #1{#2} \label{\@@@label}
+    }
+}}
+
+
+% include a figure
+% r #1  - flag that represents a search directory 
+%       p - part's    resources
+%       s - section's resources
+%       g - global resources
+% m #2  - figure path
+% s #3  - b use global label names
+% o #4  - figure label
+% o #5  - figure caption
+% G #6  - namespace options
+% G #7  - image options
+\NewDocumentCommand{\addFigure}{ r<> m s o o G{ht} G{}}
+{{
+    % path to a figure
+    \tl_clear_new:N \@@@path
+    \@@sections@res@load:Nnnn \@@@path {figs}{pathTable}{#1}
+    \tl_set:Nx \@@@path {\@@@path/#2}
+
+    % insert the figure
+    \@@sections@figs@include:nnnn {figure}{#6}
+    { \centering\includegraphics[#7]{\@@@path} }
+    { \@@sections@figs@genCaption{\caption}{#5}{#1}{#3}{#4} }
+}}
+
+
+% reference figure
+% r #1  - flag that represents a search directory 
+%       p - part's    resources
+%       s - section's resources
+%       g - global resources
+% s #2  - b use global label names
+% m #3  - equation label
+\NewDocumentCommand{\refFg}{ r<> s m}
+{
+    \@@sections@res@ref:nnnnn {figs}{#1}{#2}{#3}{\c_novalue_tl}
+}
+
+
+% >> -----------------------------------------------------------------------------------------------
+% >> feet figure to a line width
+% >> -----------------------------------------------------------------------------------------------
+
+% >> feet body to page: 
+% https://stackoverflow.com/a/55750239
+% https://latex.org/forum/viewtopic.php?t=17797
+\newlength{\figs@eqlen }
+\newlength{\figs@offset} \setlength{\figs@offset}{3mm}
+
+
+% #1 environment
+% #2 env settings
+% #3 include command
+% #4 caption command
+\cs_new_protected:Nn \@@sections@figs@include:nnnn
+{  
+    \settowidth{\figs@eqlen}{#3}
+    
+    \begin{#1}[#2]
+        \ifdimcomp{\figs@eqlen}{>}{\linewidth - \figs@offset} 
+        { \resizebox{\linewidth - \figs@offset}{!}{#3} }
+        { #3 }
+
+        #4
+    \end{#1}
+}
+
+
+\texcode{}
