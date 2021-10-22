@@ -316,7 +316,7 @@
 % \sa \@@packs@stack@onClose, \@@packs@onClose
 \cs_new_protected:Npn \@@packs@addOnClose:n #1
 {{
-    \tl_put_right:Nn   \@@packs@onClose {#1}
+    \tl_gput_right:Nn  \@@packs@onClose {#1}
     \seq_gpop_right:NN \@@packs@stack@onClose \@@@buffer
     \seq_gput_right:NV \@@packs@stack@onClose \@@packs@onClose
 }}

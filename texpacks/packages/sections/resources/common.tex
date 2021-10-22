@@ -75,7 +75,10 @@
         }
         \bool_xor:nnF {\@@@bOpen}{\@@@bOpened}
         { 
-            \msg_error:nnx {@@sections}{generic}{resource~cannot~be~opend~or~closed~twice:~#1} 
+            \msg_info:nnx {@@sections}{generic}{\prop_if_in_p:cn {@@@sections@##1@pathTable}  {#1}}
+            \msg_info:nnx {@@sections}{generic}{\prop_if_in_p:cn {@@@sections@##1@labelTable} {#1}}
+            \msg_error:nnx {@@sections}{generic}{resource~cannot~be~opend~or~closed~twice:~#1~(##1)} 
+
         }
 
         % operate over the frame
@@ -83,10 +86,12 @@
         {   % open a frame
             \prop_gput:cnx {@@@sections@##1@pathTable}  {#1} {#2\tl_use:c{@@@sections@##1@pathPostfix}}
             \prop_gput:cnn {@@@sections@##1@labelTable} {#1} {#2}
+            \msg_info:nnx {@@sections}{generic}{resource~opened:~#1~(##1)} 
         }
         {   % close the frame
             \prop_gremove:cn {@@@sections@##1@pathTable}  {#1}
             \prop_gremove:cn {@@@sections@##1@labelTable} {#1}
+            \msg_info:nnx {@@sections}{generic}{resource~closed:~#1~(##1)} 
         }
     }
 }}
