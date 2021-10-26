@@ -14,24 +14,29 @@
 \@@sections@res@newResourceType{tabs}{tabs:}{/tabs}
 
 
-% #1 - caption function
-% #2 - caption
-% #3 - level's letter
-% #4 - b use global label names
-% #5 - short label's name
-\NewDocumentCommand{\@@sections@tabs@genCaption}{ m m m m m }
-{{
+% #1 - output valiable: tl
+% #2 - caption function
+% #3 - caption
+% #4 - level's letter
+% #5 - b use global label names
+% #6 - short label's name
+\cs_new_protected:Nn \@@sections@tabs@generateCaption:Nnnnnn
+{
     \bool_if:nT {
-        ! \tl_if_novalue_p:n{#2} &&
         ! \tl_if_novalue_p:n{#3} &&
-        ! \tl_if_novalue_p:n{#5}
+        ! \tl_if_novalue_p:n{#4} &&
+        ! \tl_if_novalue_p:n{#6}
     } {
         \tl_clear_new:N \@@@label
-        \@@sections@res@makeLabel:Nnnnn \@@@label {tabs}{#3}{#4}{#5}
-
-        #1{#2} \label{\@@@label}
+        \@@sections@res@makeLabel:Nnnnn \@@@label {tabs}{#4}{#5}{#6}
+        \@@sections@tabs@generateCaption:NnnV #1 {#2}{#3}\@@@label
     }
-}}
+}
+\cs_new_protected:Nn \@@sections@tabs@generateCaption:Nnnn
+{
+    \tl_set:Nn #1 {#2{#3} \label{#4}}
+}
+\cs_generate_variant:Nn \@@sections@tabs@generateCaption:Nnnn {NnnV}
 
 
 \newcommand{\@@sections@tabs@caption}[1]
@@ -49,11 +54,19 @@
 % s #4 - b use global label names
 % o #5 - short label's name
 % o #6 - caption
+% >> ----------------------------------| heads & foots
+% G #7 - head code p. 1
+% G #8 - head code p. 2+
 % >>
-\NewDocumentEnvironment{sectable}{ O{\textwidth} m d<> s o o}
+\NewDocumentEnvironment{sectable}{ O{\textwidth} m d<> s o o G{} G{#7} }
 {
+    \tl_clear_new:N \@@@caption
+    \@@sections@tabs@generateCaption:Nnnnnn \@@@caption {\caption}{#6}{#3}{#4}{#5}
+
     \xltabular{#1}{#2}
-        \@@sections@tabs@genCaption {\caption}{#6}{#3}{#4}{#5}
+        \tl_use:N \@@@caption \\
+        #7 \endfirsthead\hline
+        #8 \endhead\hline
 } 
 {
     \endxltabular
@@ -62,34 +75,16 @@
 % >>
 \NewDocumentEnvironment{atomictable}{ O{\textwidth} m d<> s o o}
 {
-    \@@sections@tabs@genCaption {\@@sections@tabs@caption}{#6}{#3}{#4}{#5}
+    \tl_clear_new:N \@@@caption
+    \@@sections@tabs@generateCaption:Nnnnnn \@@@caption {\@@sections@tabs@caption}{#6}{#3}{#4}{#5}
+    
+    \tl_use:N \@@@caption
     \tabularx{#1}{#2}
 } 
 {
     \endtabularx
     \bigskip
 }
-
-
-% create table headers
-% m #2 - header[1]
-% m #3 - header[x] = header[1]
-% m #4 - footer
-\NewDocumentCommand{\sectableHeaders}{ +m +m +m }
-{{
-    % first header
-    #1 \endfirsthead\hline
-
-    % second header
-    \tl_if_blank:nTF {#2}
-    { #1 }
-    { #2 }
-
-    \endhead\hline
-    
-    % add footer
-    #3 \endfoot\hline
-}}
 
 
 \texcode{}
