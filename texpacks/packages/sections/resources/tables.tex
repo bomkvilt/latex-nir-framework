@@ -45,6 +45,19 @@
 }
 
 
+% reference a table
+% r #1  - flag that represents a search directory 
+%       p - part's    resources
+%       s - section's resources
+%       g - global resources
+% s #2  - b use global label names
+% m #3  - equation label
+\NewDocumentCommand{\refTab}{ r<> s m }
+{
+    \@@sections@res@ref:nnnnn {tabs}{#1}{#2}{#3}{\c_novalue_tl}
+}
+
+
 % create a new table
 % >> ----------------------------------| table topo
 % O #1 - table width
