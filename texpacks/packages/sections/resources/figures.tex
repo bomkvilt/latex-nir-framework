@@ -17,7 +17,7 @@
     } {
         \tl_clear_new:N \@@@label
         \@@sections@res@makeLabel:Nnnnn \@@@label {figs}{#3}{#4}{#5}
-
+        
         #1{#2} \label{\@@@label}
     }
 }}
@@ -46,6 +46,36 @@
     { \centering\includegraphics[#7]{\@@@path} }
     { \@@sections@figs@genCaption{\caption}{#5}{#1}{#3}{#4} }
 }}
+% >>
+\NewDocumentCommand{\addFigures}{ r<> m s o o G{ht} G{}}
+{{
+    % split passed pathes and count them
+    \seq_clear_new:N \@@@pathes
+    \seq_set_split:Nnn \@@@pathes {,} {#2}
+
+    % \note since ints cannot be _clear_new the variable 
+    % is defined in a global scope
+    \int_set:Nn \@@@count {\seq_count:N \@@@pathes}
+
+    \begin{figure}[#6]
+        \centering
+        % add figures side by side
+        \seq_map_inline:Nn \@@@pathes
+        {
+            % path to a figure
+            \tl_clear_new:N \@@@path
+            \@@sections@res@load:Nnnn \@@@path {figs}{pathTable}{#1}
+            \tl_set:Nx \@@@path {\@@@path/##1}
+
+            % add the figure in a minipage
+            \minipage{\linewidth / \int_use:N \@@@count - 2mm}
+                \centering\includegraphics[width=\linewidth #7]{\@@@path}
+            \endminipage\hfill
+        }
+        % add caption
+        \@@sections@figs@genCaption{\caption}{#5}{#1}{#3}{#4}
+    \end{figure}
+}}
 
 
 % reference figure
@@ -55,7 +85,7 @@
 %       g - global resources
 % s #2  - b use global label names
 % m #3  - equation label
-\NewDocumentCommand{\refFg}{ r<> s m}
+\NewDocumentCommand{\refFig}{ r<> s m}
 {
     \@@sections@res@ref:nnnnn {figs}{#1}{#2}{#3}{\c_novalue_tl}
 }
