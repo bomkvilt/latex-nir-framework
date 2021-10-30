@@ -30,9 +30,12 @@ class _numToString(metaclass = Singleton):
 
 class EquationData:
     def __init__(self) -> None:
+        # content
         self.label:str
         self.data:str
         self.id:str
+        # style
+        self.stretch:float
 
 
 class _arrayUnwrapper(BaseTexParser):

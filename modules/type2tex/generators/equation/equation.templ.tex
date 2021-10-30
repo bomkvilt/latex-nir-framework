@@ -10,7 +10,6 @@
 % #2 - subequation label
 \DeclareDocumentCommand{\printEquations}{ o o }
 {{
-    \def\arraystretch{2}
     {%- set eqs = vars['equations'] %}
 
     {% for eq in eqs %}
@@ -30,7 +29,9 @@
 
 {% for eq in eqs %}
 \def\printEquations{{!eq.id!}}#1{
-    {% if eq.label != '' -%}
+    \def\arraystretch{{{!eq.stretch!}}}
+
+    {%- if eq.label != '' -%}
     \registerEquationPart{#1}{ {{!eq.label!}} }
     {%- endif %}
     \begin{equation}

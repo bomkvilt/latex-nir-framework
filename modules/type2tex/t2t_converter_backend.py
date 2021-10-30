@@ -72,4 +72,11 @@ class _texProcessor:
         eqinfo = FEquationInfo()
         eqinfo.equations = equations
         eqinfo.varexpls  = varexpls
+        self._deduceStretch(equations)
         return self._EQGenerator.Generate(eqinfo)
+
+    @staticmethod
+    def _deduceStretch(equations: list[EquationData]) -> float:
+        for eqdata in equations:
+            bUseDouble = r'\dfrac' in eqdata.data
+            eqdata.stretch = 2. if bUseDouble else 1.
