@@ -23,9 +23,9 @@
 \cs_new_protected:Nn \@@sections@tabs@generateCaption:Nnnnnn
 {
     \bool_if:nT {
-        ! \tl_if_novalue_p:n{#3} &&
-        ! \tl_if_novalue_p:n{#4} &&
-        ! \tl_if_novalue_p:n{#6}
+        ! \tl_if_blank_p:n{#3} &&
+        ! \tl_if_blank_p:n{#4} &&
+        ! \tl_if_blank_p:n{#6}
     } {
         \tl_clear_new:N \@@@label
         \@@sections@res@makeLabel:Nnnnn \@@@label {tabs}{#4}{#5}{#6}
@@ -71,7 +71,7 @@
 % G #7 - head code p. 1
 % G #8 - head code p. 2+
 % >>
-\NewDocumentEnvironment{sectable}{ O{\textwidth} m d<> s o o G{} G{#7} }
+\NewDocumentEnvironment{sectable}{ O{\textwidth} m d<> s O{} O{} G{} G{#7} }
 {
     \tl_clear_new:N \@@@caption
     \@@sections@tabs@generateCaption:Nnnnnn \@@@caption {\caption}{#6}{#3}{#4}{#5}
@@ -85,17 +85,31 @@
     \endxltabular
     \bigskip
 }
+
+% create a new table
+% >> ----------------------------------| table topo
+% O #1 - table width
+% m #2 - columns pattern
+% >> ----------------------------------| label
+% d #3 - level's letter
+% s #4 - b use global label names
+% O #5 - short label's name
+% O #6 - caption
+% >> ----------------------------------| table position
+% O #7 - floating settings
 % >>
-\NewDocumentEnvironment{atomictable}{ O{\textwidth} m d<> s o o}
+\NewDocumentEnvironment{atomictable}{ O{\textwidth} m d<> s O{} O{} O{H}}
 {
     \tl_clear_new:N \@@@caption
-    \@@sections@tabs@generateCaption:Nnnnnn \@@@caption {\@@sections@tabs@caption}{#6}{#3}{#4}{#5}
+    \@@sections@tabs@generateCaption:Nnnnnn \@@@caption {\caption}{#6}{#3}{#4}{#5}
     
-    \tl_use:N \@@@caption
-    \tabularx{#1}{#2}
+    \table[#7] 
+        \tl_use:N \@@@caption
+        \tabularx{#1}{#2}
 } 
 {
-    \endtabularx
+        \endtabularx
+    \table
     \bigskip
 }
 
