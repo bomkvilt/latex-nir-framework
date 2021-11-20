@@ -81,6 +81,14 @@
 \def\l@paragraph   {\@dottedtocline{7}{0em}{7em}}
 \def\l@subparagraph{\@dottedtocline{8}{0em}{7em}}
 
+% add support of cleveref labels
+\crefname{sectionA}{разд.}{разд.}
+\crefname{sectionB}{разд.}{разд.}
+\crefname{sectionC}{разд.}{разд.}
+\crefname{sectionD}{разд.}{разд.}
+\crefname{sectionE}{разд.}{разд.}
+\crefname{sectionF}{разд.}{разд.}
+
 % --------------------------------------------------------------------------------------------------
 % >> create a generic section command
 % --------------------------------------------------------------------------------------------------
@@ -90,7 +98,8 @@
 % #2 - section level. By default = 1
 % #3 - temporary inavaliable
 % #4 - section name
-\NewDocumentCommand{\newsection}{s R<>{1} o m}
+% #5 - section label
+\NewDocumentCommand{\newsection}{s R<>{1} o m o}
 {
     % According to unknown reasons I cannot setup a space before a 
     % title with use a \titlespacing command. So, it's an only way
@@ -99,15 +108,21 @@
 
     % add section
     \begin{switch}{#2}
-        \case{1}{\sectionA{#4}}
-        \case{2}{\sectionB{#4}}
-        \case{3}{\sectionC{#4}}
-        \case{4}{\sectionD{#4}}
-        \case{5}{\sectionE{#4}}
-        \case{6}{\sectionF{#4}}
+        \case{1}{\sectionA{#4} \bool_if:nT{!\tl_if_novalue_p:n{#5}} { \label{seq:#5} }}
+        \case{2}{\sectionB{#4} \bool_if:nT{!\tl_if_novalue_p:n{#5}} { \label{seq:#5} }}
+        \case{3}{\sectionC{#4} \bool_if:nT{!\tl_if_novalue_p:n{#5}} { \label{seq:#5} }}
+        \case{4}{\sectionD{#4} \bool_if:nT{!\tl_if_novalue_p:n{#5}} { \label{seq:#5} }}
+        \case{5}{\sectionE{#4} \bool_if:nT{!\tl_if_novalue_p:n{#5}} { \label{seq:#5} }}
+        \case{6}{\sectionF{#4} \bool_if:nT{!\tl_if_novalue_p:n{#5}} { \label{seq:#5} }}
 
         % \todo raise an exception
     \end{switch}
+}
+
+% reference a section
+% #1 - section label
+\NewDocumentCommand{\refSeq}{ m } {
+    \cref{seq:#1}
 }
 
 \texcode{}
