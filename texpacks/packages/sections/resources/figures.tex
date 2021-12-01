@@ -41,10 +41,10 @@
     \@@sections@res@load:Nnnn \@@@path {figs}{pathTable}{#1}
     \tl_set:Nx \@@@path {\@@@path/#2}
 
-    % insert the figure
+    % insert the figure and clamp to page width
     \@@sections@figs@include:nnnn {figure}{#6}
-    { \centering\includegraphics[#7]{\@@@path} }
-    { \@@sections@figs@genCaption{\caption}{#5}{#1}{#3}{#4} }
+        {\centering\includegraphics[#7]{\@@@path}}
+        {\@@sections@figs@genCaption{\caption}{#5}{#1}{#3}{#4}}
 }}
 % >>
 \NewDocumentCommand{\addFigures}{ r<> m s o o G{ht} G{}}
@@ -76,6 +76,43 @@
         \@@sections@figs@genCaption{\caption}{#5}{#1}{#3}{#4}
     \end{figure}
 }}
+
+
+% create a sub figure
+% r #1  - flag that represents a search directory 
+%       p - part's    resources
+%       s - section's resources
+%       g - global resources
+% m #2  - figure path
+% m #3  - image fraction
+% s #4  - b use global label names
+% o #5  - figure label
+% o #6  - figure caption
+\NewDocumentCommand{\addSubfigure}{ r<> m m s o o }
+{{
+    % path to a figure
+    \tl_clear_new:N \@@@path
+    \@@sections@res@load:Nnnn \@@@path {figs}{pathTable}{#1}
+    \tl_set:Nx \@@@path {\@@@path/#2}
+
+    \begin{subfigure}{#3\textwidth}
+        \includegraphics[width=\textwidth]{\@@@path}
+        \@@sections@figs@genCaption{\caption}{#6}{#1}{#4}{#5}
+    \end{subfigure}
+}}
+
+
+% r #1  - resource level
+% s #2  - b use global label names
+% o #3  - figure label
+% o #4  - figure caption
+% O #5  - floating options
+\NewDocumentEnvironment{subfigures}{ r<> s o o O{ht} } {
+    \figure[#5]
+} {
+    \@@sections@figs@genCaption{\caption}{#4}{#1}{#2}{#3}
+    \endfigure
+}
 
 
 % reference figure
