@@ -10,15 +10,19 @@
 % #5 - short label's name
 \NewDocumentCommand{\@@sections@figs@genCaption}{ m m m m m }
 {{
+    % add a caption
+    \bool_if:nT {! \tl_if_empty_p:n{#2}} {
+        #1{#2}
+    }
+
+    % add a label
     \bool_if:nT {
-        ! \tl_if_novalue_p:n{#2} &&
-        ! \tl_if_novalue_p:n{#3} &&
-        ! \tl_if_novalue_p:n{#5}
+        ! \tl_if_empty_p:n{#3} &&
+        ! \tl_if_empty_p:n{#5}
     } {
         \tl_clear_new:N \@@@label
         \@@sections@res@makeLabel:Nnnnn \@@@label {figs}{#3}{#4}{#5}
-        
-        #1{#2} \label{\@@@label}
+        \label{\@@@label}
     }
 }}
 
@@ -30,11 +34,11 @@
 %       g - global resources
 % m #2  - figure path
 % s #3  - b use global label names
-% o #4  - figure label
-% o #5  - figure caption
+% O #4  - figure label
+% O #5  - figure caption
 % G #6  - namespace options
 % G #7  - image options
-\NewDocumentCommand{\addFigure}{ r<> m s o o G{ht} G{}}
+\NewDocumentCommand{\addFigure}{ r<> m s O{} O{} G{ht} G{}}
 {{
     % path to a figure
     \tl_clear_new:N \@@@path
@@ -47,7 +51,7 @@
         {\@@sections@figs@genCaption{\caption}{#5}{#1}{#3}{#4}}
 }}
 % >>
-\NewDocumentCommand{\addFigures}{ r<> m s o o G{ht} G{}}
+\NewDocumentCommand{\addFigures}{ r<> m s O{} O{} G{ht} G{}}
 {{
     % split passed pathes and count them
     \seq_clear_new:N \@@@pathes
@@ -86,9 +90,9 @@
 % m #2  - figure path
 % m #3  - image fraction
 % s #4  - b use global label names
-% o #5  - figure label
-% o #6  - figure caption
-\NewDocumentCommand{\addSubfigure}{ r<> m m s o o }
+% O #5  - figure label
+% O #6  - figure caption
+\NewDocumentCommand{\addSubfigure}{ r<> m m s O{} O{} }
 {{
     % path to a figure
     \tl_clear_new:N \@@@path
@@ -104,10 +108,10 @@
 
 % r #1  - resource level
 % s #2  - b use global label names
-% o #3  - figure label
-% o #4  - figure caption
+% O #3  - figure label
+% O #4  - figure caption
 % O #5  - floating options
-\NewDocumentEnvironment{subfigures}{ r<> s o o O{ht} } {
+\NewDocumentEnvironment{subfigures}{ r<> s O{} O{} O{ht} } {
     \figure[#5]
 } {
     \@@sections@figs@genCaption{\caption}{#4}{#1}{#2}{#3}
