@@ -97,13 +97,14 @@
 % O #6 - caption
 % >> ----------------------------------| table position
 % O #7 - floating settings
+% D #8 - code before tabularx
 % >>
-\NewDocumentEnvironment{atomictable}{ O{\textwidth} m d<> s O{} O{} O{H}}
+\NewDocumentEnvironment{atomictable}{ O{\textwidth} m d<> s O{} O{} O{H} D(){\small}}
 {
     \tl_clear_new:N \@@@caption
     \@@sections@tabs@generateCaption:Nnnnnn \@@@caption {\caption}{#6}{#3}{#4}{#5}
     
-    \table[#7]
+    \table[#7]#8
     \tl_use:N \@@@caption
     \tabularx{#1}{#2}
 } 
