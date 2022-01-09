@@ -1,6 +1,6 @@
 from __future__ import annotations
 from ..includes import FTexworksConfig, ModuleBase, ArgParserBuilder, assert_all
-from .classes.latex_compiler import LatexCompiler
+from .classes.latex_compiler import LatexCompiler, TCompilerSettings
 
 
 
@@ -17,34 +17,52 @@ class BuildScriptsModule(ModuleBase):
 
         # subcommand:: compile
         cmd = builder.addCommand('compile')
-        cmd.addArgument('docname', help = 'name of a document with not .tex extension')
-        cmd.addArgument('--mode' , help = 'build optimisation mode',
+        cmd.addArgument(
+            'docname', 
+            help = 'name of a document with not .tex extension', )
+        cmd.addArgument(
+            '--mode', 
+            help     = 'build optimisation mode',
             required = False, 
-            default = 'raw',
-            choices = ['raw', 'PCH']
-        )
-        cmd.addArgument('--steps', help = 'number of LaTeX compiler steps',
+            default  = 'raw',
+            choices  = ['raw', 'PCH'], )
+        cmd.addArgument(
+            '--steps', 
+            help     = 'number of LaTeX compiler steps',
             required = False, 
-            default = 2,
-            choices = [str(n) for n in range(0, 3)]
-        )
-        cmd.addFlag('-f', help = 'force PCH compilation')
+            default  = 2,
+            choices  = [str(n) for n in range(0, 3)], )
+        cmd.addFlag(
+            '--bib', 
+            help  = 'make biber pass',
+            hasNo = False, )
+        cmd.addFlag(
+            '-f',
+            help='force PCH compilation', )
         cmd.addHandler(self._onBuild)
 
         # subcommand:: clear
         cmd = builder.addCommand('clear')
-        cmd.addArgument('docname', help = 'name of a document with not .tex extension')
+        cmd.addArgument(
+            'docname', 
+            help = 'name of a document with not .tex extension', )
         cmd.addHandler(self._onClear)
 
-# protected: handlers
+    # protected: handlers
 
     def _onInit(self, args) -> None:
         # do nothing
         pass
 
     def _onBuild(self, args) -> None:
-        assert_all(args, args.f, args.mode, args.steps, args.docname, mode='non-none')
-        self._latexCompiler.CompileDocument(args.docname, args.mode, int(args.steps), args.f)
+        settings = TCompilerSettings()
+        settings.mode    = args.mode
+        settings.steps   = int(args.steps)
+        settings.docname = args.docname
+        settings.bbiber  = args.bib
+        settings.bforce  = args.f
+
+        self._latexCompiler.CompileDocument(settings)
 
     def _onClear(self, args) -> None:
         # \todo write a clear script

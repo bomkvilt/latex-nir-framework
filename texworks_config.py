@@ -33,6 +33,10 @@ class FTexworksConfig:
         self.latexAUXdir = '.'
         self.latexOutdir = '.'
 
+        # biblio
+        self.biblioCompiler = 'biber'
+        self.biblioArgs = []
+
     def GetResourceDir(self, type: str) -> str:
         if (type in self.resourceTypes):
             return self.resourceTypes[type]

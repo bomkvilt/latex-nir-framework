@@ -20,9 +20,9 @@ class Type2LaTeXModule(ModuleBase):
         initcmd = builder.addCommand('init', help = 'init module data')
         initcmd.addHandler(self._initModuleHandler)
         
-        gencmd = builder.addCommand('gen' , help = 'generate equations')
-        gencmd.addArgument('secname', help = 'section name pattern')
-        gencmd.addFlag('-f', onAction = True, help = 'force update')
+        gencmd = builder.addCommand('gen' , help='generate equations')
+        gencmd.addArgument('secname', help='section name pattern')
+        gencmd.addFlag('-f', on_action=True, help='force update')
         gencmd.addHandler(self._generateEquationsHandler)
 
     # protected:
