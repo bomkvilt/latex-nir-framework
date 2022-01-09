@@ -31,7 +31,7 @@ class BuildScriptsModule(ModuleBase):
             help     = 'number of LaTeX compiler steps',
             required = False, 
             default  = 2,
-            choices  = [str(n) for n in range(0, 3)], )
+            choices  = [str(n) for n in range(0, 5)], )
         cmd.addFlag(
             '--bib', 
             help  = 'make biber pass',
