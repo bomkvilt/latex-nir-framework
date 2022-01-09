@@ -1,5 +1,5 @@
 from __future__ import annotations
-from ..includes import FTexworksConfig, ModuleBase, ArgParserBuilder, PathWorks
+from ..includes import FTexworksConfig, ModuleBase, ArgParserBuilder, assert_all
 from .classes.latex_compiler import LatexCompiler
 
 
@@ -15,7 +15,7 @@ class BuildScriptsModule(ModuleBase):
         cmd = builder.addCommand('init')
         cmd.addHandler(self._onInit)
 
-        # subcommand:: .
+        # subcommand:: compile
         cmd = builder.addCommand('compile')
         cmd.addArgument('docname', help = 'name of a document with not .tex extension')
         cmd.addArgument('--mode' , help = 'build optimisation mode',
@@ -43,16 +43,8 @@ class BuildScriptsModule(ModuleBase):
         pass
 
     def _onBuild(self, args) -> None:
-        assert(args.f != None)
-        assert(args.mode != None)
-        assert(args.steps != None)
-        assert(args.docname != None)
-        self._latexCompiler.CompileDocument(
-            args.docname,
-            args.mode,
-            int(args.steps),
-            args.f
-        )
+        assert_all(args, args.f, args.mode, args.steps, args.docname, mode='non-none')
+        self._latexCompiler.CompileDocument(args.docname, args.mode, int(args.steps), args.f)
 
     def _onClear(self, args) -> None:
         # \todo write a clear script

@@ -1,18 +1,20 @@
 from __future__  import annotations
-from typing import Any, cast
+from typing import Any
 from ...includes import FTexworksConfig, PathWorks
-import subprocess
 import copy
-import time
-import sys
 import os
+import shutil
+import subprocess
+import sys
+import time
 
 
-class _compileOrder:
-    def __init__(self, conf: FTexworksConfig, 
-        docname: str, 
-        mode   : str, 
-        steps  : int, 
+class _TCLAGenerator:
+    def __init__(
+        self, conf: FTexworksConfig,
+        docname: str,
+        mode   : str,
+        steps  : int,
         bForce : bool
     ) -> None:
         # settings
@@ -77,24 +79,21 @@ class _compileOrder:
         return args
 
     def _makePCHNameAndPath(self, docname: str) -> tuple[str, str]:
-        basedir = self.conf.GetLatexOutdir()
-        pchName = PathWorks.JoinPath(basedir, docname + '.PCH')
+        pchName = PathWorks.JoinPath(self.outdir, docname + '.PCH')
         pchPath = pchName + '.fmt'
         return (pchName, pchPath)
 
 
-
-class _bcolors:
-    HEADER  = '\033[95m'
-    OKBLUE  = '\033[94m'
-    OKCYAN  = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL    = '\033[91m'
-    ENDC    = '\033[0m'
-    BOLD    = '\033[1m'
+class _COLORS:
+    HEADER    = '\033[95m'
+    OKBLUE    = '\033[94m'
+    OKCYAN    = '\033[96m'
+    OKGREEN   = '\033[92m'
+    WARNING   = '\033[93m'
+    FAIL      = '\033[91m'
+    ENDC      = '\033[0m'
+    BOLD      = '\033[1m'
     UNDERLINE = '\033[4m'
-
 
 
 class LatexCompiler:
@@ -102,15 +101,19 @@ class LatexCompiler:
         self._conf = conf
 
     def CompileDocument(self, docname: str, mode: str, steps: int, bForce: bool) -> None:
-        order = _compileOrder(self._conf, docname, mode, steps, bForce)
-        for args in order.GenerateCLAs():
-            self._runScript(args)
-
-# private:
-
-    def _runScript(self, args: list[str]) -> None:
         docroot = self._conf.GetDocumentRoot()
-        
+        outroot = self._conf.GetLatexOutroot()
+        pdfroot = self._conf.GetPDFRoot()
+
+        generator = _TCLAGenerator(self._conf, docname, mode, steps, bForce)
+        for args in generator.GenerateCLAs():
+            self._runScript(args, docroot=docroot)
+
+        self._copyPDF(outroot, pdfroot, docname)
+
+    # private:
+
+    def _runScript(self, args: list[str], docroot: str) -> None:
         # \todo add argument check: so, of they contains symbols like [']
         # this means that user passed the args as he is used to write to
         # a command line to make a key=value pair if value contains spaces.
@@ -118,22 +121,42 @@ class LatexCompiler:
         # the quotes. Here we have no command line args precessors so we need to pass 
         # args withot the quotes.
         try:
-            self._printMessage(print, _bcolors.OKGREEN,
+            self._printMessage(print, _COLORS.OKGREEN,
                 f'running command {args}')
-            
-            t0 = time.time()            
-            
-            subprocess.run(args, cwd=docroot).check_returncode()
-            
-            self._printMessage(print, _bcolors.OKGREEN, 
-                'pass\' compilation time: {:.3f} s'.format(time.time() - t0))
-            
-        except subprocess.CalledProcessError:
 
-            self._printMessage(sys.exit, _bcolors.FAIL, 
+            t0 = time.time()
+            subprocess.run(args, cwd=docroot).check_returncode()
+
+            self._printMessage(print, _COLORS.OKGREEN,
+                'pass\' compilation time: {:.3f} s'.format(time.time() - t0))
+
+        except subprocess.CalledProcessError:
+            self._printMessage(sys.exit, _COLORS.FAIL,
                 f'fatal:\n'
-                f'build recipe {args} ended with non-zero code ... termination')
+                f'build recipe {args} ended with non-zero code... termination')
+
+    def _copyPDF(self, src_dir: str, dst_dir: str, docname: str):
+        if not os.path.exists(src_dir):
+            self._printMessage(sys.exit, _COLORS.FAIL,
+                f'source pdf directory not exists: "{src_dir}"',)
+
+        src = PathWorks.JoinPath(src_dir, docname + '.pdf')
+        dst = PathWorks.JoinPath(dst_dir, docname + '.pdf')
+        if not os.path.exists(src):
+            self._printMessage(sys.exit, _COLORS.FAIL,
+                f'source pdf directory exists: "{src}"',)
+
+        if not os.path.exists(dst_dir):
+            os.mkdir(dst_dir)
+        shutil.copyfile(src, dst)
+
+        if os.path.exists(dst):
+            self._printMessage(print, _COLORS.OKGREEN,
+                f'final pdf is copied to: "{dst}"',)
+        else:
+            self._printMessage(sys.exit, _COLORS.FAIL,
+                f'failed to copy pdf from "{src}" to "{dst}"',)
 
     @staticmethod
     def _printMessage(func, color: Any, *pattern: str) -> None:
-        func(f'\n\n{color} == {"".join(pattern)}{_bcolors.ENDC}\n\n')
+        func(f'\n\n{color} == {"".join(pattern)}{_COLORS.ENDC}\n\n')

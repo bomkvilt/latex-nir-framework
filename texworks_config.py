@@ -5,13 +5,14 @@ class FTexworksConfig:
     def __init__(self) -> None:
         # basic project settings
         self.project_root = '.'
-        
+
         # prject structure
         self.document_dir = 'documents'
         self.sections_dir = 'sections'
         self.parts_dir    = 'parts'
         self.build_dir    = 'build/TeX'
-        
+        self.pdf_dir      = 'build/pdf'
+
         # resource directories
         self.resourceTypes = {
             'figures'  : 'figs',
@@ -42,6 +43,12 @@ class FTexworksConfig:
 
     def GetBuildRoot(self):
         return PathWorks.JoinPath(self.project_root, self.document_dir, self.build_dir)
+
+    def GetPDFRoot(self):
+        return PathWorks.JoinPath(self.project_root, self.document_dir, self.pdf_dir)
+    
+    def GetLatexOutroot(self):
+        return PathWorks.JoinPath(self.project_root, self.document_dir, self.build_dir, self.latexOutdir)
 
     def GetLatexAUXdir(self):
         return PathWorks.JoinPath(self.build_dir, self.latexAUXdir)
