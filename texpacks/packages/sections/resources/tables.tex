@@ -70,18 +70,20 @@
 % >> ----------------------------------| heads & foots
 % G #7 - head code p. 1
 % G #8 - head code p. 2+
+% D #9 - code before tabularx
 % >>
-\NewDocumentEnvironment{sectable}{ O{\textwidth} m d<> s O{} O{} G{} G{#7} }
-{
+\NewDocumentEnvironment{sectable}{ O{\textwidth} m d<> s O{} O{} G{} G{#7} D(){\small}} {
     \tl_clear_new:N \@@@caption
     \@@sections@tabs@generateCaption:Nnnnnn \@@@caption {\caption}{#6}{#3}{#4}{#5}
 
+    #9
     \xltabular{#1}{#2}
-        \tl_use:N \@@@caption \\
-        #7 \endfirsthead\hline
-        #8 \endhead\hline
-} 
-{
+        \tl_if_empty:nF {#6} {
+            \tl_use:N \@@@caption \\
+        }
+        \hline #7 \hline \endfirsthead
+        \hline #8 \hline \endhead
+} {
     \endxltabular
     \bigskip
 }
