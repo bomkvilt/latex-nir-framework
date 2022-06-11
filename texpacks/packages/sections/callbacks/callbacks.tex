@@ -8,18 +8,18 @@
 \NewDocumentCommand{\sectionfile}{  }
 {
     % initialize sections' env
-    \@@sections@clb@level@on{s}
+    \@@secs@clb@level@on{s}
     % set a callback that will deinitialize the level
-    \registerOnCloseEvent{\@@sections@clb@level@off{s}}
+    \registerOnCloseEvent{\@@secs@clb@level@off{s}}
 }
 
 % Mark the file as part
 \NewDocumentCommand{\partfile}{  }
 {
     % initialize sections' env
-    \@@sections@clb@level@on{p}
+    \@@secs@clb@level@on{p}
     % set a callback that will deinitialize the level
-    \registerOnCloseEvent{\@@sections@clb@level@off{p}}
+    \registerOnCloseEvent{\@@secs@clb@level@off{p}}
 }
 
 
@@ -32,15 +32,15 @@
 % #1 - level's letter
 %    s - section
 %    p - part   
-\NewDocumentCommand{\@@sections@clb@level@on}{ m }
+\NewDocumentCommand{\@@secs@clb@level@on}{ m }
 {
-    \@@sections@res@frame<#1>{\curbase}{on}
+    \@@secs@res@frame<#1>{\curbase}{on}
 }
 
 
-\NewDocumentCommand{\@@sections@clb@level@off}{ m }
+\NewDocumentCommand{\@@secs@clb@level@off}{ m }
 {
-    \@@sections@res@frame<#1>{}{off}
+    \@@secs@res@frame<#1>{}{off}
 }
 
 

@@ -18,7 +18,6 @@
 
 \input{./packages/texcode.tex}
 \input{./packages/math/math.tex}
-\input{./packages/langs/ru.tex}
 
 % import table packages
 \texcode{on}
@@ -26,8 +25,11 @@
 {
 	\usepackage{tabularx, xltabular, booktabs} % tables unitary and long
     \usepackage{multirow, makecell} % improved table formatting
-    \usepackage{threeparttable    } % automatic table caption's width
+    \usepackage{threeparttable} % automatic table caption's width
 	\usepackage{caption}
+
+	% \todo all tables must be rewrited on the package
+	\usepackage{tabularray}
 
 	%% for nested tabularx envoronmenrs:
 	%  
@@ -98,3 +100,15 @@
 \input{./packages/styles/acro.tex}
 \input{./packages/styles/enums.tex}
 \input{./packages/styles/biblio.tex}
+
+\input{./packages/langs/ru.tex}
+
+
+\moduleCode {
+	\captionsetup{
+		justification=raggedright,
+		singlelinecheck=false,
+		margin=\parindent,
+		font=small
+	}
+}{}

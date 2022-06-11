@@ -33,9 +33,25 @@
     %  
     \usepackage{mathtext}
 
+
     % >> add math-mode chortcuts <<
     \def\cc#1{\accentset{\circ}{#1}}
     \def\hh#1{\hat{#1}}
+
+
+    % https://stackoverflow.com/a/1436771
+    \newcommand{\slfrac}[2]{\left.#1\middle/#2\right.}
+
+
+    % >> command that add units <<
+    \NewDocumentCommand{\UNIT}{ m G{} } {
+        \tl_if_blank:nTF {#2} {
+            $#1$
+        } {
+            $\slfrac{#1}{#2}$
+        }
+    }
+
 
     % 
     \input{./environments.tex}

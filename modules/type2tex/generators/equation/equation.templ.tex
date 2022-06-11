@@ -12,6 +12,8 @@
 {{
     {%- set eqs = vars['equations'] %}
 
+    \medskip
+
     {% for eq in eqs %}
     {%- if eq.label != '' -%}
     % if (!#2 || (#2 && #2 == '{{!eq.label!}}')) -- the equation must be kept
@@ -35,7 +37,7 @@
     \registerEquationPart{#1}{ {{!eq.label!}} }
     {%- endif %}
     \begin{equation}
-    \begin{gathered}
+    \begin{gathered} \small
         {% if eq.label != '' -%}
         \IfValueT{#1} { \label{#1--{{!eq.label!}}} }
         {%- else -%}
@@ -56,13 +58,13 @@
     {%- set varexpls = vars['varexpls'] %}
 
     {%- if (varexpls|length) > 0 %}
-    \begin{tabularx}{\textwidth}{llX}
+    \setlength{\tabcolsep}{0em}
+    \begin{xltabular}[r]{\textwidth - \parindent}{l l X}
         {%- set varexpl = varexpls[0] %}
-        #1 & ${{!varexpl.key!}}$ & --- {{!varexpl.val!}} {!- if varexpl.math -!}; ${{!varexpl.math!}}$ {!- endif !} \\
+        #1 & ~ ${{!varexpl.key!}}$ ~ & -- {{!varexpl.val!}} {!- if varexpl.math -!}; ${{!varexpl.math!}}$ {!- endif !} \\
         {%- for varexpl in varexpls[1:] %}
-        ~  & ${{!varexpl.key!}}$ & --- {{!varexpl.val!}} {!- if varexpl.math -!}; ${{!varexpl.math!}}$ {!- endif !} \\
+        ~  & ~ ${{!varexpl.key!}}$ ~ & -- {{!varexpl.val!}} {!- if varexpl.math -!}; ${{!varexpl.math!}}$ {!- endif !} \\
         {%- endfor %}
-    \end{tabularx}
+    \end{xltabular}
     {%- endif %}
 }}
-

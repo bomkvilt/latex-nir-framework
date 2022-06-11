@@ -7,11 +7,22 @@
 % shorted number of command
 % >> -----------------------------------------------------------------------------------------------
 
+% -------------------------------------
+
+% table font size
+\let\TableFontSize\small
+
+% min cell
+\def\MinRowHeigth{8mm}
+\def\TableStretch{1}
+
+% -------------------------------------
+
 % create a new resource type
 % #1 - resource group
 % #2 - label prefix
 % #3 - subpath
-\@@sections@res@newResourceType{tabs}{tabs:}{/tabs}
+\@@secs@res@newResourceType{tabs}{tabs:}{/tabs}
 
 
 % #1 - output valiable: tl
@@ -20,7 +31,7 @@
 % #4 - level's letter
 % #5 - b use global label names
 % #6 - short label's name
-\cs_new_protected:Nn \@@sections@tabs@generateCaption:Nnnnnn
+\cs_new_protected:Nn \@@secs@tabs@GenerateCaption:Nnnnnn
 {
     \bool_if:nT {
         ! \tl_if_blank_p:n{#3} &&
@@ -28,20 +39,41 @@
         ! \tl_if_blank_p:n{#6}
     } {
         \tl_clear_new:N \@@@label
-        \@@sections@res@makeLabel:Nnnnn \@@@label {tabs}{#4}{#5}{#6}
-        \@@sections@tabs@generateCaption:NnnV #1 {#2}{#3}\@@@label
+        \@@secs@res@makeLabel:Nnnnn \@@@label {tabs}{#4}{#5}{#6}
+        \@@secs@tabs@GenerateCaption:NnnV #1 {#2}{#3}\@@@label
     }
 }
-\cs_new_protected:Nn \@@sections@tabs@generateCaption:Nnnn
+\cs_new_protected:Nn \@@secs@tabs@GenerateCaption:Nnnn
 {
     \tl_set:Nn #1 {#2{#3} \label{#4}}
 }
-\cs_generate_variant:Nn \@@sections@tabs@generateCaption:Nnnn {NnnV}
+\cs_generate_variant:Nn \@@secs@tabs@GenerateCaption:Nnnn {NnnV}
 
 
-\newcommand{\@@sections@tabs@caption}[1]
+\cs_new:Nn \@@secs@tabs@GenerateClumnNumbers: {
+    \seq_clear_new:N \@@@values
+    \int_step_inline:nnn {1} {\l__tblr_c_int} {
+        \seq_put_right:Nn \@@@values {\parbox{\cellwidth}{\centering ##1}}
+    }
+    \seq_use:Nnnn \@@@values { & }{ & }{ & }
+}
+
+
+\newcommand{\@@secs@tabs@caption}[1]
 {
     \captionof{table}{#1}
+}
+
+
+\NewDocumentCommand{\@@sec@tabs@Presetup}{ m } {
+    \tl_if_blank:nTF {#1} {
+        % default code
+        \TableFontSize
+        \setstretch{\TableStretch}
+    } {
+        % passed code
+        #1
+    }
 }
 
 
@@ -54,66 +86,87 @@
 % m #3  - equation label
 \NewDocumentCommand{\refTab}{ r<> s m }
 {
-    \@@sections@res@ref:nnnnn {tabs}{#1}{#2}{#3}{\c_novalue_tl}
+    \@@secs@res@ref:nnnnn {tabs}{#1}{#2}{#3}{\c_novalue_tl}
+}
+
+
+% --------------------------------------------------------------------------------------------------
+
+\NewTblrEnviron{sectablebase}
+\SetTblrOuter[sectablebase]{long}
+\SetTblrInner[sectablebase] {
+    rows = {8mm},
+}
+
+\NewTblrEnviron{atomictablebase}
+\SetTblrOuter[atomictablebase]{tall}
+\SetTblrInner[atomictablebase] {
+    rows = {8mm},
 }
 
 
 % create a new table
-% >> ----------------------------------| table topo
-% O #1 - table width
-% m #2 - columns pattern
-% >> ----------------------------------| label
-% d #3 - level's letter
-% s #4 - b use global label names
-% o #5 - short label's name
-% o #6 - caption
-% >> ----------------------------------| heads & foots
-% G #7 - head code p. 1
-% G #8 - head code p. 2+
-% D #9 - code before tabularx
-% >>
-\NewDocumentEnvironment{sectable}{ O{\textwidth} m d<> s O{} O{} G{} G{#7} D(){\small}} {
-    \tl_clear_new:N \@@@caption
-    \@@sections@tabs@generateCaption:Nnnnnn \@@@caption {\caption}{#6}{#3}{#4}{#5}
+% \note the tables must be created in a new scope
+% d #1 - level's letter
+% s #2 - b use global label names
+% o #3 - short label's name
+% o #4 - caption
+% D #5 - code before tabularx
+\NewDocumentEnvironment{sectable}{ d<> s O{} O{} D(){} } {
+    \tl_clear_new:N \@@@label
+    \@@secs@res@makeLabel:Nnnnn \@@@label {tabs}{#1}{#2}{#3}
 
-    #9
-    \xltabular{#1}{#2}
-        \tl_if_empty:nF {#6} {
-            \tl_use:N \@@@caption \\
-        }
-        \hline #7 \hline \endfirsthead
-        \hline #8 \hline \endhead
+    \@@sec@tabs@Presetup{#5}
+    \sectablebase [
+        caption = {#4},
+        label   = {\tl_use:N \@@@label},
+    ]
 } {
-    \endxltabular
+    \endsectablebase
     \bigskip
 }
 
+
 % create a new table
-% >> ----------------------------------| table topo
-% O #1 - table width
-% m #2 - columns pattern
-% >> ----------------------------------| label
-% d #3 - level's letter
-% s #4 - b use global label names
-% O #5 - short label's name
-% O #6 - caption
-% >> ----------------------------------| table position
-% O #7 - floating settings
-% D #8 - code before tabularx
-% >>
-\NewDocumentEnvironment{atomictable}{ O{\textwidth} m d<> s O{} O{} O{H} D(){\small}}
-{
-    \tl_clear_new:N \@@@caption
-    \@@sections@tabs@generateCaption:Nnnnnn \@@@caption {\caption}{#6}{#3}{#4}{#5}
-    
-    \table[#7]#8
-    \tl_use:N \@@@caption
-    \tabularx{#1}{#2}
-} 
-{
-    \endtabularx
+% G #1 - column scheme
+% d #2 - level's letter
+% s #3 - b use global label names
+% O #4 - short label's name
+% O #5 - caption
+% O #6 - floating settings
+% D #7 - code before tabularx
+\NewDocumentEnvironment{atomictable}{G{} d<> s O{} O{} O{H} D(){}} {
+    \tl_clear_new:N \@@@label
+    \@@secs@res@makeLabel:Nnnnn \@@@label {tabs}{#2}{#3}{#4}
+
+    \tl_clear_new:N \@@@code
+    \tl_set:Nn \@@@code {
+        \atomictablebase [
+            caption = {#5},
+            label   = {\tl_use:N \@@@label},
+        ]
+    }
+
+    \tl_if_blank:nF {#1} {
+        \tl_put_right:Nn \@@@code {
+            {#1}
+        }
+    }
+
+    \table[#6]
+        \@@sec@tabs@Presetup{#7}
+        \tl_use:N \@@@code
+} {
+        \endatomictablebase
     \endtable
     \bigskip
+}
+
+
+\NewDocumentCommand{\VCELL}{m} {
+    \begin{tabular}{@{}c@{}}
+        \rotatebox[origin=c]{90}{#1}
+    \end{tabular}
 }
 
 
