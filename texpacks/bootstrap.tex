@@ -4,16 +4,12 @@
 % import common packages
 \moduleCode
 {
-	\usepackage{comment   } % 
-	\usepackage{etoolbox  } % usefull tools
-	\usepackage{pdflscape } % album layout
-	\usepackage{geometry  } % fields
-	\usepackage{atbegshi  } % output routine callbacks
+	\usepackage{geometry  } % page size
 	\usepackage{float     }
-	\usepackage{placeins  }
 	\usepackage{xspace    }
+	\usepackage{caption   }
 	\usepackage{subcaption}
-	\usepackage{fmtcount  }
+	\usepackage{fmtcount  } % padzeroes
 }{}
 
 \input{./packages/texcode.tex}
@@ -21,15 +17,14 @@
 
 % import table packages
 \texcode{on}
-\moduleCode
-{
+\moduleCode {
 	\usepackage{tabularx, xltabular, booktabs} % tables unitary and long
     \usepackage{multirow, makecell} % improved table formatting
     \usepackage{threeparttable} % automatic table caption's width
-	\usepackage{caption}
-
+	
 	% \todo all tables must be rewrited on the package
 	\usepackage{tabularray}
+	\UseTblrLibrary{counter}
 
 	%% for nested tabularx envoronmenrs:
 	%  
@@ -102,13 +97,3 @@
 \input{./packages/styles/biblio.tex}
 
 \input{./packages/langs/ru.tex}
-
-
-\moduleCode {
-	\captionsetup{
-		justification=raggedright,
-		singlelinecheck=false,
-		margin=\parindent,
-		font=small
-	}
-}{}

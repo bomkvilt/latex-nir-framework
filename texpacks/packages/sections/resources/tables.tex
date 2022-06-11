@@ -95,13 +95,15 @@
 \NewTblrEnviron{sectablebase}
 \SetTblrOuter[sectablebase]{long}
 \SetTblrInner[sectablebase] {
-    rows = {8mm},
+    rows  = {8mm},
+    cells = {m},
 }
 
 \NewTblrEnviron{atomictablebase}
 \SetTblrOuter[atomictablebase]{tall}
 \SetTblrInner[atomictablebase] {
-    rows = {8mm},
+    rows  = {8mm},
+    cells = {m},
 }
 
 
@@ -109,17 +111,19 @@
 % \note the tables must be created in a new scope
 % d #1 - level's letter
 % s #2 - b use global label names
-% o #3 - short label's name
-% o #4 - caption
-% D #5 - code before tabularx
-\NewDocumentEnvironment{sectable}{ d<> s O{} O{} D(){} } {
+% O #3 - short label's name
+% O #4 - caption
+% O #5 - env options
+% D #6 - code before tabularx
+\NewDocumentEnvironment{sectable}{ d<> s O{} O{} O{} D(){} } {
     \tl_clear_new:N \@@@label
     \@@secs@res@makeLabel:Nnnnn \@@@label {tabs}{#1}{#2}{#3}
 
-    \@@sec@tabs@Presetup{#5}
+    \@@sec@tabs@Presetup{#6}
     \sectablebase [
         caption = {#4},
         label   = {\tl_use:N \@@@label},
+        #5
     ]
 } {
     \endsectablebase

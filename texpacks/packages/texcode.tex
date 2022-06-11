@@ -3,14 +3,11 @@
     \usepackage{ifthen}
     
     %%% open code-specific environment
-    \NewDocumentCommand{\texcode}{ m }
-    {
-        \ifthenelse{\equal{#1}{on}}
-        {
+    \NewDocumentCommand{\texcode}{ m } {
+        \ifthenelse{\equal{#1}{on}} {
             \ExplSyntaxOn
             \makeatletter
-        }
-        {
+        } {
             \makeatother
             \ExplSyntaxOff
         }

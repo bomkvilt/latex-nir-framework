@@ -42,14 +42,14 @@
     % --------------------------------- localisation
     % ----------------------------------------------------------------------------------------------
     % --------------------------------- Tables
-
+    
     % setup caption style
     \SetTblrStyle   {default}{indent = 0.cm}
     \DefTblrTemplate{caption-tag  }{default}{Таблица\hspace{0.25em}\thetable}
     \DefTblrTemplate{conthead-text}{default}{Продолжение таблицы \thetable}
     \DefTblrTemplate{caption-sep  }{default}{--}
     \DefTblrTemplate{caption-text }{default}{\InsertTblrText{caption}}
-
+    
     % remove "continue" futter 
     \DefTblrTemplate{contfoot-text}{default}{}
 
@@ -59,9 +59,14 @@
         \UseTblrTemplate{caption-tag}{default}
         \UseTblrTemplate{caption-sep}{default}
         \UseTblrTemplate{caption-text}{default}
-    }
+        }
     \DefTblrTemplate{capcont}{default} {
         \UseTblrIndent  {default}
         \UseTblrTemplate{conthead-text}{default}
-    }
+        }
+
+
+    % --------------------------------- Subfigures
+
+    \renewcommand\thesubfigure{\asbuk{subfigure}}
 }
