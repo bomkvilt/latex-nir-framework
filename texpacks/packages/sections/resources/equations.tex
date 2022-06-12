@@ -16,8 +16,7 @@
 % n #2  - equation's label
 % n #3  - equation's part to pick up
 % n #4  - ignore varexpl section
-\cs_new_protected:Npn \@@secs@eqns@input:nnnn #1 #2 #3 #4
-{{
+\cs_new_protected:Npn \@@secs@eqns@input:nnnn #1 #2 #3 #4 {{
     \input{#1}
 
     \printEquations[#2][#3]
@@ -45,8 +44,7 @@
 % o #4  - equation label
 % d #5  - equation's part to pick up
 % s #6  - ignore varexpl section
-\NewDocumentCommand{\addEquation}{ r<> m s o d<> s}
-{{
+\NewDocumentCommand{\addEquation}{ r<> m s o d<> s} {{
     % path to equation
     \tl_clear_new:N \@@@path
     \@@secs@res@load:Nnnn \@@@path {eqs}{pathTable}{#1}
@@ -64,9 +62,8 @@
 % register specofied suffix to specified label
 % #1 - full label name
 % #2 - sublabel
-\NewDocumentCommand{\registerEquationPart}{ m m }
-{
-    \@@secs@res@addSublabel:nnn {eqs}{#1}{#2}
+\NewDocumentCommand{\registerEquationPart}{ m m } {%
+    \@@secs@res@addSublabel:nnn {eqs}{#1}{#2}%
 }
 
 
@@ -78,9 +75,8 @@
 % s #2  - b use global label names
 % m #3  - equation label
 % d #4  - equation's parts: csv
-\NewDocumentCommand{\refEq}{ r<> s m d<>}
-{
-    \@@secs@res@ref:nnnnn {eqs}{#1}{#2}{#3}{#4}
+\NewDocumentCommand{\refEq}{ r<> s m d<>} {%
+    \@@secs@res@ref:nnnnn {eqs}{#1}{#2}{#3}{#4}%
 }
 
 

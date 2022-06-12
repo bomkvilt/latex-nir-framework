@@ -59,12 +59,20 @@
 
     {%- if (varexpls|length) > 0 %}
     \setlength{\tabcolsep}{0em}
-    \begin{xltabular}[r]{\textwidth - \parindent}{l l X}
+    \begin{longtblr} [
+        label = none,
+        entry = none,
+        theme = where,
+    ] {
+        colspec = {l l X[l]},
+        width   = {\textwidth - \parindent},
+        cells   = {t},
+    }
         {%- set varexpl = varexpls[0] %}
         #1 & ~ ${{!varexpl.key!}}$ ~ & -- {{!varexpl.val!}} {!- if varexpl.math -!}; ${{!varexpl.math!}}$ {!- endif !} \\
         {%- for varexpl in varexpls[1:] %}
         ~  & ~ ${{!varexpl.key!}}$ ~ & -- {{!varexpl.val!}} {!- if varexpl.math -!}; ${{!varexpl.math!}}$ {!- endif !} \\
         {%- endfor %}
-    \end{xltabular}
+    \end{longtblr}
     {%- endif %}
 }}

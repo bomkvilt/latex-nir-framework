@@ -54,17 +54,29 @@
     \DefTblrTemplate{contfoot-text}{default}{}
 
     % setup caption styles
-    \DefTblrTemplate{caption}{default}{
+    \DefTblrTemplate{caption}{default} {
         \UseTblrIndent  {default}
         \UseTblrTemplate{caption-tag}{default}
         \UseTblrTemplate{caption-sep}{default}
         \UseTblrTemplate{caption-text}{default}
-        }
+    }
     \DefTblrTemplate{capcont}{default} {
         \UseTblrIndent  {default}
         \UseTblrTemplate{conthead-text}{default}
-        }
+    }
 
+
+
+    \DefTblrTemplate{caption}{where} {
+        % empty
+    }
+    \DefTblrTemplate{capcont}{where} {
+        % empty
+    }
+    \NewTblrTheme{where} {
+        \SetTblrTemplate{caption}{where}
+        \SetTblrTemplate{capcont}{where}
+    }
 
     % --------------------------------- Subfigures
 

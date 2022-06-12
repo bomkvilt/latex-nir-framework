@@ -10,6 +10,9 @@
 	\usepackage{caption   }
 	\usepackage{subcaption}
 	\usepackage{fmtcount  } % padzeroes
+
+	% draft mode: remove image pathes from image mock boxes
+	\usepackage{xpatch}
 }{}
 
 \input{./packages/texcode.tex}
@@ -23,7 +26,7 @@
     \usepackage{threeparttable} % automatic table caption's width
 	
 	% \todo all tables must be rewrited on the package
-	\usepackage{tabularray}
+	\usepackage{tabularray, tokcycle, environ}
 	\UseTblrLibrary{counter}
 
 	%% for nested tabularx envoronmenrs:
